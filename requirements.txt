@@ -1,0 +1,4 @@
+simplejson==3.6.3
+requests=2.4.1
+chardet=2.3.0
+six==1.8.0

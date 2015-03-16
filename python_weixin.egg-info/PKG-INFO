@@ -1,0 +1,11 @@
+Metadata-Version: 1.0
+Name: python-weixin
+Version: 0.0.1
+Summary: Weixin API client
+Home-page: https://github.com/zongxiao/python-weixin
+Author: Zongxiao Cheng
+Author-email: cacique1103@gmail.com
+License: GPL
+Description: UNKNOWN
+Keywords: weixin
+Platform: UNKNOWN

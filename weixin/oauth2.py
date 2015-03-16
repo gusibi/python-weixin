@@ -1,0 +1,209 @@
+# -*-coding: utf-8 -*-
+# !/usr/bin/env python
+from __future__ import unicode_literals
+
+"""
+File:   oauth2.py
+Author: goodspeed
+Email:  cacique1103@gmail.com
+Github: https://github.com/zongxiao
+Date:   2015-02-06
+Description: Weixin OAuth2
+"""
+
+
+import requests
+from six.moves.urllib.parse import urlencode
+
+
+from .json_import import simplejson
+from .helper import error_parser, get_encoding
+
+
+class OAuth2AuthExchangeError(Exception):
+    def __init__(self, code, description):
+        self.code = code
+        self.description = description
+
+    def __str__(self):
+        return '%s: %s' % (self.code, self.description)
+
+
+class OAuth2API(object):
+    host = None
+    base_path = None
+    authorize_url = None
+    access_token_url = None
+    refresh_token_url = None
+    redirect_uri = None
+    # some providers use "oauth_token"
+    access_token_field = "access_token"
+    protocol = "https"
+    # override with 'Instagram', etc
+    api_name = "Generic API"
+
+    def __init__(self, appid=None, app_secret=None,
+                 access_token=None, redirect_uri=None):
+        self.appid = appid
+        self.app_secret = app_secret
+        self.access_token = access_token
+        self.redirect_uri = redirect_uri
+
+    def get_authorize_url(self, scope=None):
+        req = OAuth2AuthExchangeRequest(self)
+        return req.get_authorize_url(scope=scope)
+
+    def get_authorize_login_url(self, scope=None):
+        """ scope should be a tuple or list of requested scope access levels """
+        req = OAuth2AuthExchangeRequest(self)
+        return req.get_authorize_login_url(scope=scope)
+
+    def exchange_code_for_access_token(self, code):
+        req = OAuth2AuthExchangeRequest(self)
+        return req.exchange_for_access_token(code=code)
+
+    def exchange_refresh_token_for_access_token(self, refresh_token):
+        req = OAuth2AuthExchangeRequest(self)
+        return req.exchange_for_access_token(refresh_token=refresh_token)
+
+
+class OAuth2AuthExchangeRequest(object):
+    def __init__(self, api):
+        self.api = api
+
+    def _url_for_authorize(self, scope=None):
+        client_params = {
+            "appid": self.api.appid,
+            "response_type": "code",
+            "redirect_uri": self.api.redirect_uri
+        }
+        if scope:
+            client_params.update(scope=' '.join(scope))
+        url_params = urlencode(client_params)
+        return "%s?%s" % (self.api.authorize_url, url_params)
+
+    def _data_for_exchange(self, code=None, refresh_token=None, scope=None):
+        app_params = {
+            "appid": self.api.appid,
+        }
+        if code:
+            app_params.update(code=code,
+                              secret=self.api.app_secret,
+                              redirect_uri=self.api.redirect_uri,
+                              grant_type="authorization_code")
+        elif refresh_token:
+            app_params.update(refresh_token=refresh_token,
+                              grant_type="refresh_token")
+        if scope:
+            app_params.update(scope=' '.join(scope))
+        url_params = urlencode(app_params)
+        if code:
+            return "%s?%s" % (self.api.access_token_url, url_params)
+        elif refresh_token:
+            return "%s?%s" % (self.api.refresh_token_url, url_params)
+
+    def get_authorize_url(self, scope=None):
+        return self._url_for_authorize(scope=scope)
+
+    def get_authorize_login_url(self, scope=None):
+        url = self._url_for_authorize(scope=scope)
+        response = requests.get(url)
+        headers = response.headers
+        if int(headers.get('content-length', 384)) < 500:
+            # 微信 参数错误返回html页面 http 状态码也是200
+            # 暂时只能根据数据大小判断
+            encoding = get_encoding(headers=headers)
+            error_data = error_parser(response.content, encoding)
+            if error_data:
+                raise OAuth2AuthExchangeError(
+                    error_data.get("errcode", 0),
+                    error_data.get("errmsg", ""))
+        return url
+
+    def exchange_for_access_token(self, code=None,
+                                  refresh_token=None, scope=None):
+        access_token_url = self._data_for_exchange(code,
+                                                   refresh_token, scope=scope)
+        response = requests.get(access_token_url)
+        parsed_content = simplejson.loads(response.content.decode())
+        if parsed_content.get('errcode', 0):
+            raise OAuth2AuthExchangeError(
+                parsed_content.get("errcode", 0),
+                parsed_content.get("errmsg", ""))
+        return parsed_content
+
+
+class OAuth2Request(object):
+
+    def __init__(self, api):
+        self.api = api
+        self.host = 'api.weixin.qq.com'
+
+    def url_for_get(self, path, parameters):
+        return self._full_url_with_params(path, parameters)
+
+    def get_request(self, path, **kwargs):
+        return self.make_request(self.prepare_request("GET", path, kwargs))
+
+    def post_request(self, path, **kwargs):
+        return self.make_request(self.prepare_request("POST", path, kwargs))
+
+    def _full_url(self, path, include_secret=False):
+        return '%s://%s%s%s%s' % (self.api.protocol,
+                                  self.host,
+                                  self.api.base_path,
+                                  path,
+                                  self._auth_query(include_secret))
+
+    def _full_url_with_params(self, path, params, include_secret=False):
+        return (self._full_url(path, include_secret) +
+                self._full_query_with_params(params))
+
+    def _full_query_with_params(self, params):
+        params = ("&" + urlencode(params)) if params else ""
+        return params
+
+    def _auth_query(self, include_secret=False):
+        if self.api.access_token:
+            return ("?%s=%s" % (self.api.access_token_field,
+                                self.api.access_token))
+
+    def _post_body(self, params):
+        return urlencode(params)
+
+    def _encode_multipart(params, files):
+        pass
+
+    def perpare_and_make_request(self, method, path,
+                                 params, include_secret=False):
+        url, method, body, headers = self.perpare_request(method, path, params,
+                                                          include_secret)
+        return self.make_request(url, method, body, headers)
+
+    def prepare_request(self, method, path, params, include_secret=False):
+        url = body = None
+        headers = {}
+
+        if not params.get('files'):
+            if method == 'POST':
+                body = self._post_body(params)
+                headers = {'Content-type': 'application/x-www-form-urlencoded'}
+                url = self._full_url(path, include_secret)
+            else:
+                url = self._full_url_with_params(path, params, include_secret)
+        else:
+            body, headers = self._encode_multipart(params, params['files'])
+            url = self._full_url(path)
+
+        return url, method, body, headers
+
+    def make_request(self, url, method="GET", body=None, headers=None):
+        headers = headers or {}
+
+        if 'User-Agent' not in headers:
+            headers.update({"User-Agent":
+                            "%s Python Client" % self.api.api_name})
+        if method == 'GET':
+            return requests.get(url, headers=headers)
+        elif method == 'POST':
+            return requests.post(url, data=body, headers=headers)

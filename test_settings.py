@@ -1,0 +1,5 @@
+test_host = "open.weixin.qq.com"
+test_base_path = ""
+test_authorize_url = "https://open.weixin.qq.com/connect/qrconnect"
+test_access_token_url = "https://api.weixin.qq.com/sns/oauth2/access_token"
+test_protocol = "https"

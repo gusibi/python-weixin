@@ -1,0 +1,4 @@
+simplejson
+requests
+six
+chardet
