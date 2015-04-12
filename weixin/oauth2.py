@@ -17,7 +17,7 @@ from six.moves.urllib.parse import urlencode
 
 
 from .json_import import simplejson
-from .helper import error_parser, get_encoding
+from .helper import error_parser, get_encoding, url_encode
 
 
 class OAuth2AuthExchangeError(Exception):
@@ -35,6 +35,7 @@ class OAuth2API(object):
     authorize_url = None
     access_token_url = None
     refresh_token_url = None
+    client_credential_token_url = None
     redirect_uri = None
     # some providers use "oauth_token"
     access_token_field = "access_token"
@@ -42,21 +43,27 @@ class OAuth2API(object):
     # override with 'Instagram', etc
     api_name = "Generic API"
 
-    def __init__(self, appid=None, app_secret=None,
-                 access_token=None, redirect_uri=None):
+    def __init__(self, appid=None, app_secret=None, access_token=None,
+                 timestamp=None, nonce=None, signature=None, mp_token=None,
+                 echostr=None, xml_body=None, redirect_uri=None, grant_type=None):
         self.appid = appid
         self.app_secret = app_secret
         self.access_token = access_token
         self.redirect_uri = redirect_uri
+        self.grant_type = grant_type
 
-    def get_authorize_url(self, scope=None):
+    def client_credential_for_access_token(self):
         req = OAuth2AuthExchangeRequest(self)
-        return req.get_authorize_url(scope=scope)
+        return req.exchange_for_access_token()
 
-    def get_authorize_login_url(self, scope=None):
+    def get_authorize_url(self, scope=None, state=None):
+        req = OAuth2AuthExchangeRequest(self)
+        return req.get_authorize_url(scope=scope, state=state)
+
+    def get_authorize_login_url(self, scope=None, state=None):
         """ scope should be a tuple or list of requested scope access levels """
         req = OAuth2AuthExchangeRequest(self)
-        return req.get_authorize_login_url(scope=scope)
+        return req.get_authorize_login_url(scope=scope, state=state)
 
     def exchange_code_for_access_token(self, code):
         req = OAuth2AuthExchangeRequest(self)
@@ -71,15 +78,18 @@ class OAuth2AuthExchangeRequest(object):
     def __init__(self, api):
         self.api = api
 
-    def _url_for_authorize(self, scope=None):
+    def _url_for_authorize(self, scope=None, state=None):
         client_params = {
             "appid": self.api.appid,
             "response_type": "code",
-            "redirect_uri": self.api.redirect_uri
+            "redirect_uri": self.api.redirect_uri,
         }
         if scope:
             client_params.update(scope=' '.join(scope))
-        url_params = urlencode(client_params)
+        if state:
+            client_params.update(state=state)
+        # url_params = urlencode(client_params)
+        url_params = url_encode(client_params, sort=True)
         return "%s?%s" % (self.api.authorize_url, url_params)
 
     def _data_for_exchange(self, code=None, refresh_token=None, scope=None):
@@ -94,6 +104,9 @@ class OAuth2AuthExchangeRequest(object):
         elif refresh_token:
             app_params.update(refresh_token=refresh_token,
                               grant_type="refresh_token")
+        elif self.api.app_secret:
+            app_params.update(secret=self.api.app_secret,
+                              grant_type=self.api.grant_type)
         if scope:
             app_params.update(scope=' '.join(scope))
         url_params = urlencode(app_params)
@@ -101,12 +114,14 @@ class OAuth2AuthExchangeRequest(object):
             return "%s?%s" % (self.api.access_token_url, url_params)
         elif refresh_token:
             return "%s?%s" % (self.api.refresh_token_url, url_params)
+        elif self.api.app_secret:
+            return "%s?%s" % (self.api.client_credential_token_url, url_params)
 
-    def get_authorize_url(self, scope=None):
-        return self._url_for_authorize(scope=scope)
+    def get_authorize_url(self, scope=None, state=None):
+        return self._url_for_authorize(scope=scope, state=state)
 
-    def get_authorize_login_url(self, scope=None):
-        url = self._url_for_authorize(scope=scope)
+    def get_authorize_login_url(self, scope=None, state=None):
+        url = self._url_for_authorize(scope=scope, state=state)
         response = requests.get(url)
         headers = response.headers
         if int(headers.get('content-length', 384)) < 500:
