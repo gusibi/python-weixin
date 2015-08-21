@@ -109,7 +109,10 @@ class OAuth2AuthExchangeRequest(object):
                               grant_type=self.api.grant_type)
         if scope:
             app_params.update(scope=' '.join(scope))
-        url_params = urlencode(app_params)
+        str_app_parmas = {}
+        for k, v in app_params.iteritems():
+            str_app_parmas[k] = unicode(v).encode('utf-8')
+        url_params = urlencode(str_app_parmas)
         if code:
             return "%s?%s" % (self.api.access_token_url, url_params)
         elif refresh_token:
