@@ -13,6 +13,7 @@ Description: Weixin OAuth2
 
 
 import requests
+from requests.exceptions import ConnectTimeout
 from six.moves.urllib.parse import urlencode
 
 
@@ -20,8 +21,20 @@ from .json_import import simplejson
 from .helper import error_parser, get_encoding, url_encode
 
 
+TIMEOUT = 2
+
+
 class OAuth2AuthExchangeError(Exception):
     def __init__(self, code, description):
+        self.code = code
+        self.description = description
+
+    def __str__(self):
+        return '%s: %s' % (self.code, self.description)
+
+
+class ConnectTimeoutError(Exception):
+    def __init__(self, code='timeout', description='Connect timeout'):
         self.code = code
         self.description = description
 
@@ -43,9 +56,10 @@ class OAuth2API(object):
     # override with 'Instagram', etc
     api_name = "Generic API"
 
-    def __init__(self, appid=None, app_secret=None, access_token=None,
-                 timestamp=None, nonce=None, signature=None, mp_token=None,
-                 echostr=None, xml_body=None, redirect_uri=None, grant_type=None):
+    def __init__(self, appid=None, app_secret=None,
+                 access_token=None, timestamp=None, nonce=None,
+                 signature=None, mp_token=None, echostr=None,
+                 xml_body=None, redirect_uri=None, grant_type=None):
         self.appid = appid
         self.app_secret = app_secret
         self.access_token = access_token
@@ -125,7 +139,10 @@ class OAuth2AuthExchangeRequest(object):
 
     def get_authorize_login_url(self, scope=None, state=None):
         url = self._url_for_authorize(scope=scope, state=state)
-        response = requests.get(url)
+        try:
+            response = requests.get(url, timeout=TIMEOUT)
+        except ConnectTimeout:
+            raise ConnectTimeoutError()
         headers = response.headers
         if int(headers.get('content-length', 384)) < 500:
             # 微信 参数错误返回html页面 http 状态码也是200
@@ -142,7 +159,10 @@ class OAuth2AuthExchangeRequest(object):
                                   refresh_token=None, scope=None):
         access_token_url = self._data_for_exchange(code,
                                                    refresh_token, scope=scope)
-        response = requests.get(access_token_url)
+        try:
+            response = requests.get(access_token_url, timeout=TIMEOUT)
+        except ConnectTimeout:
+            raise ConnectTimeoutError()
         parsed_content = simplejson.loads(response.content.decode())
         if parsed_content.get('errcode', 0):
             raise OAuth2AuthExchangeError(
@@ -222,6 +242,13 @@ class OAuth2Request(object):
             headers.update({"User-Agent":
                             "%s Python Client" % self.api.api_name})
         if method == 'GET':
-            return requests.get(url, headers=headers)
+            try:
+                return requests.get(url, headers=headers, timeout=TIMEOUT)
+            except ConnectTimeout:
+                raise ConnectTimeoutError()
         elif method == 'POST':
-            return requests.post(url, data=body, headers=headers)
+            try:
+                return requests.post(url, data=body, headers=headers,
+                                     timeout=TIMEOUT)
+            except ConnectTimeout:
+                raise ConnectTimeoutError()
