@@ -2,23 +2,14 @@ python-weixin
 -----
 A Python client for the Weixin REST APIs
 
-0.0.4 新功能
+0.1.0 功能
 -----
-* 修改目录结构
-
-0.0.3 新功能
------
-* 添加超时处理
-* 修改包名
-
-0.0.2 新功能
------
-增加微信公众平台支持
+微信公众平台 和开放平台 支持
 
 
 Installation
 -----
-python setup.py install
+pip install python-weixin
 
 Requires
 -----
