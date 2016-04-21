@@ -7,4 +7,4 @@ __license__ = 'BSD'
 
 
 from .bind import WeixinClientError, WeixinAPIError
-from .client import WeixinAPI
+from .client import WeixinAPI, WeixinMpAPI

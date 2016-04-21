@@ -1,4 +1,0 @@
-simplejson
-requests
-six
-chardet

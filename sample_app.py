@@ -4,8 +4,8 @@ from flask import redirect
 from flask import request
 from flask import jsonify
 
-from weixin.client import WeixinAPI
-from weixin.oauth2 import OAuth2AuthExchangeError
+from pyWeixin.client import WeixinAPI
+from pyWeixin.oauth2 import OAuth2AuthExchangeError
 
 app = Flask(__name__)
 

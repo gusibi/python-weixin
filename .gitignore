@@ -11,6 +11,7 @@ bin/
 parts/
 eggs/
 build/
+python_weixin.egg-info/
 
 # test
 test_example.py

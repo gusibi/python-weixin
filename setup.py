@@ -2,7 +2,7 @@
 from setuptools import setup, find_packages
 
 setup(name="python-weixin",
-      version="0.0.2",
+      version="0.0.3",
       description="Weixin API client",
       license="BSD",
       install_requires=["simplejson","requests","six", "chardet"],
@@ -10,5 +10,5 @@ setup(name="python-weixin",
       author_email="cacique1103@gmail.com",
       url="https://github.com/zongxiao/python-weixin",
       packages = find_packages(),
-      keywords= "weixin",
+      keywords= "weixin wechat",
       zip_safe = True)

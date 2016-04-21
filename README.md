@@ -2,6 +2,10 @@ python-weixin
 -----
 A Python client for the Weixin REST APIs
 
+0.0.3 新功能
+-----
+* 添加超时处理
+* 修改包名
 
 0.0.2 新功能
 -----
@@ -35,7 +39,7 @@ Weixin API 使用 OAuth2 认证方式
 微信开放平台使用示例：
 
 ``` python
-from weixin.client import WeixinAPI
+from pyWeixin.client import WeixinAPI
 
 scope = ("snsapi_login", )
 api = WeixinAPI(appid=APP_ID,
@@ -53,7 +57,7 @@ user = api.user(openid="openid")
 微信公众平台使用示例：
 
 ``` python
-from weixin.client import WeixinMpAPI
+from pyWeixin.client import WeixinMpAPI
 
 scope = ("snsapi_base", )
 api = WeixinMpAPI(appid=APP_ID,

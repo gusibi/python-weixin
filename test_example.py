@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
-from weixin.client import WeixinAPI
-from weixin.oauth2 import OAuth2AuthExchangeError
+from pyWeixin.client import WeixinAPI
+from pyWeixin.oauth2 import OAuth2AuthExchangeError
 
 APP_ID = 'your app id'
 APP_SECRET = 'your secret'
