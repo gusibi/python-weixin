@@ -12,6 +12,7 @@ parts/
 eggs/
 build/
 python_weixin.egg-info/
+dist/
 
 # test
 test_example.py
