@@ -2,13 +2,14 @@
 from setuptools import setup, find_packages
 
 setup(name="python-weixin",
-      version="0.1.1",
-      description="Weixin API client",
+      version="0.1.2",
+      description="Python Weixin API client",
       license="BSD",
-      install_requires=["simplejson","requests","six", "chardet"],
+      install_requires=["simplejson", "requests", "six", "chardet"],
       author="Zongxiao Cheng",
       author_email="cacique1103@gmail.com",
       url="https://github.com/zongxiao/python-weixin",
-      packages = find_packages(),
-      keywords= "weixin wechat",
-      zip_safe = True)
+      download_url="https://github.com/zongxiao/python-weixin/archive/master.zip",
+      packages=find_packages(),
+      keywords=["python-weixin", "weixin", "wechat", "sdk"],
+      zip_safe=True)
