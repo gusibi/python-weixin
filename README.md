@@ -2,6 +2,10 @@ python-weixin
 -----
 A Python client for the Weixin REST APIs
 
+0.1.1 新增功能
+-----
+完善服务异常处理
+
 0.1.0 功能
 -----
 微信公众平台 和开放平台 支持

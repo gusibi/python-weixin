@@ -13,7 +13,8 @@ Description: Weixin OAuth2
 
 
 import requests
-from requests.exceptions import ConnectTimeout
+from requests.exceptions import (ConnectTimeout, ReadTimeout,
+                                 ConnectionError as _ConnectionError)
 from six.moves.urllib.parse import urlencode
 
 
@@ -34,7 +35,16 @@ class OAuth2AuthExchangeError(Exception):
 
 
 class ConnectTimeoutError(Exception):
-    def __init__(self, code='timeout', description='Connect timeout'):
+    def __init__(self, code, description):
+        self.code = code
+        self.description = description
+
+    def __str__(self):
+        return '%s: %s' % (self.code, self.description)
+
+
+class ConnectionError(Exception):
+    def __init__(self, code, description):
         self.code = code
         self.description = description
 
@@ -141,8 +151,11 @@ class OAuth2AuthExchangeRequest(object):
         url = self._url_for_authorize(scope=scope, state=state)
         try:
             response = requests.get(url, timeout=TIMEOUT)
-        except ConnectTimeout:
-            raise ConnectTimeoutError()
+        except (ConnectTimeout, ReadTimeout):
+            raise ConnectTimeoutError('timeout', 'Connect timeout')
+        except _ConnectionError:
+            raise ConnectionError('conntect_error',
+                                  'Failed to establish a new connection')
         headers = response.headers
         if int(headers.get('content-length', 384)) < 500:
             # 微信 参数错误返回html页面 http 状态码也是200
@@ -161,8 +174,11 @@ class OAuth2AuthExchangeRequest(object):
                                                    refresh_token, scope=scope)
         try:
             response = requests.get(access_token_url, timeout=TIMEOUT)
-        except ConnectTimeout:
-            raise ConnectTimeoutError()
+        except (ConnectTimeout, ReadTimeout):
+            raise ConnectTimeoutError('timeout', 'Connect timeout')
+        except _ConnectionError:
+            raise ConnectionError('conntect_error',
+                                  'Failed to establish a new connection')
         parsed_content = simplejson.loads(response.content.decode())
         if parsed_content.get('errcode', 0):
             raise OAuth2AuthExchangeError(
@@ -241,14 +257,11 @@ class OAuth2Request(object):
         if 'User-Agent' not in headers:
             headers.update({"User-Agent":
                             "%s Python Client" % self.api.api_name})
-        if method == 'GET':
-            try:
-                return requests.get(url, headers=headers, timeout=TIMEOUT)
-            except ConnectTimeout:
-                raise ConnectTimeoutError()
-        elif method == 'POST':
-            try:
-                return requests.post(url, data=body, headers=headers,
-                                     timeout=TIMEOUT)
-            except ConnectTimeout:
-                raise ConnectTimeoutError()
+        try:
+            return requests.request(method, url, data=body,
+                                    headers=headers, timeout=TIMEOUT)
+        except (ConnectTimeout, ReadTimeout):
+            raise ConnectTimeoutError('timeout', 'Connect timeout')
+        except _ConnectionError:
+            raise ConnectionError('conntect_error',
+                                  'Failed to establish a new connection')
