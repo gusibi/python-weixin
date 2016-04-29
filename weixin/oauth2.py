@@ -1,6 +1,6 @@
 # -*-coding: utf-8 -*-
 # !/usr/bin/env python
-from __future__ import unicode_literals
+# from __future__ import unicode_literals
 
 """
 File:   oauth2.py
@@ -12,6 +12,7 @@ Description: Weixin OAuth2
 """
 
 
+import json
 import requests
 from requests.exceptions import (ConnectTimeout, ReadTimeout,
                                  ConnectionError as _ConnectionError)
@@ -69,7 +70,8 @@ class OAuth2API(object):
     def __init__(self, appid=None, app_secret=None,
                  access_token=None, timestamp=None, nonce=None,
                  signature=None, mp_token=None, echostr=None,
-                 xml_body=None, redirect_uri=None, grant_type=None):
+                 body=None, xml_body=None, json_body=None,
+                 redirect_uri=None, grant_type=None):
         self.appid = appid
         self.app_secret = app_secret
         self.access_token = access_token
@@ -230,14 +232,15 @@ class OAuth2Request(object):
 
     def perpare_and_make_request(self, method, path,
                                  params, include_secret=False):
-        url, method, body, headers = self.perpare_request(method, path, params,
-                                                          include_secret)
-        return self.make_request(url, method, body, headers)
+        url, method, body, json_body,  headers = self.prepare_request(
+            method, path, params, include_secret)
+        return self.make_request(url, method, body, json_body, headers)
 
     def prepare_request(self, method, path, params, include_secret=False):
         url = body = None
         headers = {}
 
+        json_body = params.pop('json_body', None)
         if not params.get('files'):
             if method == 'POST':
                 body = self._post_body(params)
@@ -249,14 +252,18 @@ class OAuth2Request(object):
             body, headers = self._encode_multipart(params, params['files'])
             url = self._full_url(path)
 
-        return url, method, body, headers
+        return url, method, body, json_body, headers
 
-    def make_request(self, url, method="GET", body=None, headers=None):
+    def make_request(self, url, method="GET", body=None,
+                     json_body=None, headers=None):
         headers = headers or {}
 
-        if 'User-Agent' not in headers:
-            headers.update({"User-Agent":
-                            "%s Python Client" % self.api.api_name})
+        # if 'User-Agent' not in headers:
+        #     headers.update({b"User-Agent":
+        #                     b"%s Python Client" % self.api.api_name})
+        if json_body:
+            headers['Content-type'] = 'application/json'
+            body = json.dumps(json_body, ensure_ascii=False)
         try:
             return requests.request(method, url, data=body,
                                     headers=headers, timeout=TIMEOUT)

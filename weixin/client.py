@@ -70,6 +70,8 @@ class WeixinMpAPI(oauth2.OAuth2API):
         self.signature = kwargs.get('signature', None)
         self.echostr = kwargs.get('echostr', None)
         self.xml_body = kwargs.get('xml_body', None)
+        self.form_body = kwargs.get('form_body', None)
+        self.json_body = kwargs.get('json_body', None)
         self.grant_type = kwargs.get('grant_type', None)
         format = kwargs.get('format', '')
 
@@ -96,3 +98,7 @@ class WeixinMpAPI(oauth2.OAuth2API):
                                accepts_parameters=['type'],
                                response_type="entry")
 
+    create_menu = bind_method(path='/cgi-bin/menu/create',
+                              method='POST',
+                              accepts_parameters=['json_body'],
+                              response_type="entry")

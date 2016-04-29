@@ -81,7 +81,6 @@ def bind_method(**config):
             for index, value in enumerate(args):
                 if value is None:
                     continue
-
                 try:
                     self.parameters[self.accepts_parameters[index]] = encode_string(value)
                 except IndexError:
@@ -92,12 +91,14 @@ def bind_method(**config):
                     continue
                 if key in self.parameters:
                     raise WeixinClientError("Parameter %s already supplied" % key)
-                self.parameters[key] = encode_string(value)
+                if key not in set(['json_body']):
+                    value = encode_string(value)
+                self.parameters[key] = value
 
-            if 'openid' in self.accepts_parameters and \
-                    'openid' not in self.parameters and \
-                    not self.requires_target_user:
-                self.parameters['openid'] = 'self'
+            # if 'openid' in self.accepts_parameters and \
+            #         'openid' not in self.parameters and \
+            #         not self.requires_target_user:
+            #     self.parameters['openid'] = 'self'
 
         def _build_path(self):
             for variable in re_path_template.findall(self.path):
@@ -119,14 +120,16 @@ def bind_method(**config):
         def _build_pagination_info(self, content_obj):
             pass
 
-        def _do_api_request(self, url, method='GET', body=None, headers=None):
+        def _do_api_request(self, url, method='GET', body=None,
+                            json_body=None, headers=None):
             headers = headers or {}
             if self.signature and self.api.app_secret is not None:
                 secret = self.api.app_secret
                 signature = hmac.new(secret, sha256).hexdigest()
                 headers['X-Weixin-Forwarded-For'] = '|'.join([signature])
             response = OAuth2Request(self.api).make_request(
-                url, method=method, body=body, headers=headers)
+                url, method=method, body=body,
+                json_body=json_body, headers=headers)
             status_code = response.status_code
             try:
                 content_obj = simplejson.loads(response.content)
@@ -162,14 +165,15 @@ def bind_method(**config):
             pass
 
         def execute(self):
-            url, method, body, headers = (
+            url, method, body, json_body, headers = (
                 OAuth2Request(self.api).prepare_request(
                     self.method, self.path, self.parameters,
                     include_secret=self.include_secret))
             if self.as_generator:
                 return self._paginator_with_url(url, method, body, headers)
             else:
-                content, next = self._do_api_request(url, method, body, headers)
+                content, next = self._do_api_request(url, method, body,
+                                                     json_body, headers)
             if self.paginates:
                 return content, next
             else:
