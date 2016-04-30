@@ -255,7 +255,7 @@ class OAuth2Request(object):
         return url, method, body, json_body, headers
 
     def make_request(self, url, method="GET", body=None,
-                     json_body=None, headers=None):
+                     xml_body=None, json_body=None, headers=None):
         headers = headers or {}
 
         # if 'User-Agent' not in headers:
@@ -263,6 +263,10 @@ class OAuth2Request(object):
         #                     b"%s Python Client" % self.api.api_name})
         if json_body:
             headers['Content-type'] = 'application/json'
+            body = json.dumps(json_body, ensure_ascii=False)
+        if xml_body:
+            headers['Content-type'] = 'application/xml'
+            #TODO xml
             body = json.dumps(json_body, ensure_ascii=False)
         try:
             return requests.request(method, url, data=body,

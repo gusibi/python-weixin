@@ -102,3 +102,46 @@ class WeixinMpAPI(oauth2.OAuth2API):
                               method='POST',
                               accepts_parameters=['json_body'],
                               response_type="entry")
+
+    get_menu = bind_method(path='/cgi-bin/menu/get',
+                           accepts_parameters=['type'],
+                           response_type='entry')
+
+    delete_menu = bind_method(path='/cgi-bin/menu/delete',
+                              accepts_parameters=['type'],
+                              response_type='entry')
+
+    add_customservice = bind_method(path='/customservice/kfaccount/add',
+                                    method='POST',
+                                    accepts_parameters=['json_body'],
+                                    response_type="entry")
+
+    update_customservice = bind_method(path='/customservice/kfaccount/update',
+                                       method='POST',
+                                       accepts_parameters=['json_body'],
+                                       response_type="entry")
+
+    delete_customservice = bind_method(path='/customservice/kfaccount/delete',
+                                       accepts_parameters=['json_body'],
+                                       response_type="entry")
+
+    getall_customservice = bind_method(path='/customservice/kfaccount/getkflist',
+                                       accepts_parameters=['json_body'],
+                                       response_type="entry")
+
+    # TODO 待实现
+    # uploadheadimg_customservice = bind_method(
+    #     path='/customservice/kfaccount/uploadheadimg',
+    #     method='POST',
+    #     accepts_parameters=['json_body'],
+    #     response_type="entry")
+
+    custom_message_send = bind_method(path='/cgi-bin/message/custom/send',
+                                      method='POST',
+                                      accepts_parameters=['json_body'],
+                                      response_type="entry")
+
+    template_message_send = bind_method(path='/cgi-bin/message/template/send',
+                                        method='POST',
+                                        accepts_parameters=['json_body'],
+                                        response_type="entry")
