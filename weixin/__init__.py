@@ -8,3 +8,5 @@ __license__ = 'BSD'
 
 from .bind import WeixinClientError, WeixinAPIError
 from .client import WeixinAPI, WeixinMpAPI
+from .response import WXResponse
+from .reply import WXReply

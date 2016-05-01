@@ -1,6 +1,11 @@
 python-weixin
 -----
 A Python client for the Weixin REST APIs
+
+0.1.4 新增功能
+-----
+添加消息回复模块 加密解密模块
+
 0.1.3 新增功能
 -----
 支持 自定义公众号菜单管理（添加|删除）
@@ -31,6 +36,9 @@ Requires
 * requests
 * simplejson
 * six
+* lxml
+* xmltodict
+* pycrypto
 
 
 Authentication
