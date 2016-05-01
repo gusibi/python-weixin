@@ -5,10 +5,10 @@ from __future__ import unicode_literals
 
 import time
 
-from .wx_msg_template import (TEXT_TEMPLATE, IMAGE_TEMPLATE,
-                              VOICE_TEMPLATE, VIDEO_TEMPLATE,
-                              THUM_MUSIC_TEMPLATE, NOTHUM_MUSIC_TEMPLATE,
-                              ARITICLE_TEMPLATE, ARITICLE_ITEM_TEMPLATE)
+from .msg_template import (TEXT_TEMPLATE, IMAGE_TEMPLATE,
+                           VOICE_TEMPLATE, VIDEO_TEMPLATE,
+                           THUM_MUSIC_TEMPLATE, NOTHUM_MUSIC_TEMPLATE,
+                           ARITICLE_TEMPLATE, ARITICLE_ITEM_TEMPLATE)
 
 
 class WXReply(object):
