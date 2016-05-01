@@ -94,6 +94,10 @@ class WeixinMpAPI(oauth2.OAuth2API):
                        accepts_parameters=["openid"],
                        response_type="entry")
 
+    validate_user = bind_method(path="/sns/auth",
+                       accepts_parameters=["openid"],
+                       response_type="entry")
+
     jsapi_ticket = bind_method(path='/cgi-bin/ticket/getticket',
                                accepts_parameters=['type'],
                                response_type="entry")
