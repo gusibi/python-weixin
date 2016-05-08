@@ -8,7 +8,8 @@ from .config import AUTO_REPLY_CONTENT
 ALLOWED_MSG_TYPES = set(['text', 'image', 'voice', 'video',
                          'shortvideo', 'location', 'link'])
 ALLOWED_EVENTS = set(['subscribe', 'unsubscribe', 'unsub_scan',
-                      'scan', 'click', 'location', 'view'])
+                      'scan', 'click', 'location', 'view',
+                      'templatesendjobfinish'])
 
 
 class WXResponse(object):
@@ -74,6 +75,10 @@ class WXResponse(object):
         # 点击菜单链接的逻辑
         pass
 
+    def _templatesendjobfinish_event_handler(self):
+        # 模板消息推送完成逻辑
+        pass
+
     def _text_msg_handler(self):
         # 文字消息处理逻辑
         self.reply_params['content'] = self.auto_reply_content
@@ -116,9 +121,12 @@ class WXResponse(object):
     def _event_handler(self, event):
         if event not in ALLOWED_EVENTS:
             # TODO raise except
-            pass
+            return
         methodname = '_{0}_event_handler'.format(event)
-        return getattr(self, methodname, None)()
+        method = getattr(self, methodname, None)
+        if method:
+            return method()
+        return
 
     def handler(self):
         msg_type, event = self._data_handler()

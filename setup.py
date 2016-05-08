@@ -2,7 +2,7 @@
 from setuptools import setup, find_packages
 
 setup(name="python-weixin",
-      version="0.1.4",
+      version="0.1.5",
       description="Python Weixin API client",
       license="BSD",
       install_requires=["simplejson", "requests", "six", "chardet"],

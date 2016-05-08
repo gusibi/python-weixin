@@ -2,6 +2,10 @@ python-weixin
 -----
 A Python client for the Weixin REST APIs
 
+0.1.5 添加 模板消息处理
+-----
+添加模板消息处理
+
 0.1.4 新增功能
 -----
 添加消息回复模块 加密解密模块
