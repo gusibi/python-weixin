@@ -13,6 +13,7 @@ eggs/
 build/
 python_weixin.egg-info/
 dist/
+venv
 
 # test
 test_example.py
