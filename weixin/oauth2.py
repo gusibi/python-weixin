@@ -99,6 +99,10 @@ class OAuth2API(object):
         req = OAuth2AuthExchangeRequest(self)
         return req.exchange_for_access_token(refresh_token=refresh_token)
 
+    def exchange_code_for_session_key(self, code):
+        req = OAuth2AuthExchangeRequest(self)
+        return req.exchange_for_session_key(js_code=code)
+
 
 class OAuth2AuthExchangeRequest(object):
     def __init__(self, api):
@@ -118,7 +122,8 @@ class OAuth2AuthExchangeRequest(object):
         url_params = url_encode(client_params, sort=True)
         return "%s?%s" % (self.api.authorize_url, url_params)
 
-    def _data_for_exchange(self, code=None, refresh_token=None, scope=None):
+    def _data_for_exchange(self, code=None, js_code=None,
+                           refresh_token=None, scope=None):
         app_params = {
             "appid": self.api.appid,
         }
@@ -126,6 +131,10 @@ class OAuth2AuthExchangeRequest(object):
             app_params.update(code=code,
                               secret=self.api.app_secret,
                               redirect_uri=self.api.redirect_uri,
+                              grant_type="authorization_code")
+        elif js_code:
+            app_params.update(js_code=js_code,
+                              secret=self.api.app_secret,
                               grant_type="authorization_code")
         elif refresh_token:
             app_params.update(refresh_token=refresh_token,
@@ -140,6 +149,8 @@ class OAuth2AuthExchangeRequest(object):
             str_app_parmas[k] = unicode(v).encode('utf-8')
         url_params = urlencode(str_app_parmas)
         if code:
+            return "%s?%s" % (self.api.access_token_url, url_params)
+        elif js_code:
             return "%s?%s" % (self.api.access_token_url, url_params)
         elif refresh_token:
             return "%s?%s" % (self.api.refresh_token_url, url_params)
@@ -172,8 +183,24 @@ class OAuth2AuthExchangeRequest(object):
 
     def exchange_for_access_token(self, code=None,
                                   refresh_token=None, scope=None):
-        access_token_url = self._data_for_exchange(code,
-                                                   refresh_token, scope=scope)
+        access_token_url = self._data_for_exchange(
+            code, refresh_token, scope=scope)
+        try:
+            response = requests.get(access_token_url, timeout=TIMEOUT)
+        except (ConnectTimeout, ReadTimeout):
+            raise ConnectTimeoutError('timeout', 'Connect timeout')
+        except _ConnectionError:
+            raise ConnectionError('conntect_error',
+                                  'Failed to establish a new connection')
+        parsed_content = simplejson.loads(response.content.decode())
+        if parsed_content.get('errcode', 0):
+            raise OAuth2AuthExchangeError(
+                parsed_content.get("errcode", 0),
+                parsed_content.get("errmsg", ""))
+        return parsed_content
+
+    def exchange_for_session_key(self, js_code=None, scope=None):
+        access_token_url = self._data_for_exchange(js_code=js_code, scope=scope)
         try:
             response = requests.get(access_token_url, timeout=TIMEOUT)
         except (ConnectTimeout, ReadTimeout):

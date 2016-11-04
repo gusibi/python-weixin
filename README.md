@@ -2,6 +2,9 @@ python-weixin
 -----
 A Python client for the Weixin REST APIs
 
+0.1.6 添加 模板消息处理
+-----
+
 0.1.5 添加 模板消息处理
 -----
 添加模板消息处理
@@ -58,7 +61,7 @@ Weixin API 使用 OAuth2 认证方式
 ### Using an access token
 获取到access token 后，可以使用token 获取 用户信息等:
 
-微信开放平台使用示例：
+#### 微信开放平台使用示例：
 
 ``` python
 from weixin.client import WeixinAPI
@@ -76,7 +79,7 @@ api = WeixinAPI(access_token=access_token)
 user = api.user(openid="openid")
 ```
 
-微信公众平台使用示例：
+#### 微信公众平台使用示例：
 
 ``` python
 from weixin.client import WeixinMpAPI
@@ -93,6 +96,17 @@ api = WeixinMpAPI(access_token=access_token)
 
 user = api.user(openid="openid")
 ```
+
+#### 微信小程序使用示例：
+
+``` python
+from weixin import WXAPPAPI
+
+api = WXAPPAPI(appid=APP_ID,
+                  app_secret=APP_SECRET)
+session_info = api.exchange_code_for_session_key(code=code)
+```
+
 
 
 #### 创建自定义菜单

@@ -1,5 +1,4 @@
 # -*-coding: utf-8 -*-
-# !/usr/bin/env python
 from __future__ import unicode_literals
 
 """
@@ -149,3 +148,25 @@ class WeixinMpAPI(oauth2.OAuth2API):
                                         method='POST',
                                         accepts_parameters=['json_body'],
                                         response_type="entry")
+
+
+class WXAPPAPI(oauth2.OAuth2API):
+
+    host = "api.weixin.qq.com"
+    base_path = ""
+    access_token_field = "access_token"
+    authorize_url = ""
+    access_token_url = "https://api.weixin.qq.com/sns/jscode2session"
+    refresh_token_url = ""
+    protocol = "https"
+    api_name = "Weixin"
+    x_ratelimit_remaining = None
+    x_ratelimit = None
+
+    def __init__(self, *args, **kwargs):
+        format = kwargs.get('format', '')
+        if format in SUPPORTED_FORMATS:
+            self.format = format
+        else:
+            raise Exception("Unsupported format")
+        super(WXAPPAPI, self).__init__(*args, **kwargs)
