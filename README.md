@@ -2,7 +2,20 @@ python-weixin
 -----
 A Python client for the Weixin REST APIs
 
-0.1.6 添加 模板消息处理
+0.1.6 支持微信小程序登录
+
+#### 微信小程序使用示例：
+
+[微信小程序登录文档](https://mp.weixin.qq.com/debug/wxadoc/dev/api/api-login.html)
+
+``` python
+from weixin import WXAPPAPI
+
+api = WXAPPAPI(appid=APP_ID,
+                  app_secret=APP_SECRET)
+session_info = api.exchange_code_for_session_key(code=code)
+```
+
 -----
 
 0.1.5 添加 模板消息处理
