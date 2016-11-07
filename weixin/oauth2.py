@@ -20,7 +20,7 @@ from six.moves.urllib.parse import urlencode
 
 
 from .json_import import simplejson
-from .helper import error_parser, get_encoding, url_encode
+from .helper import error_parser, get_encoding, url_encode, iteritems
 
 
 TIMEOUT = 2
@@ -145,7 +145,7 @@ class OAuth2AuthExchangeRequest(object):
         if scope:
             app_params.update(scope=' '.join(scope))
         str_app_parmas = {}
-        for k, v in app_params.iteritems():
+        for k, v in iteritems(app_params):
             str_app_parmas[k] = unicode(v).encode('utf-8')
         url_params = urlencode(str_app_parmas)
         if code:
