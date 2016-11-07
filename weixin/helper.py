@@ -202,7 +202,7 @@ class WeixiErrorParser(html_parser.HTMLParser):
 
 
 def error_parser(error_html, encoding='gbk'):
-    html = unicode(error_html, encoding or 'gbk')
+    html = text_type(error_html, encoding or 'gbk')
     error_parser = WeixiErrorParser()
     error_parser.feed(html)
     if error_parser.data:
