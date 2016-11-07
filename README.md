@@ -2,11 +2,10 @@ python-weixin
 -----
 A Python client for the Weixin REST APIs
 
+0.1.6 支持微信小程序登录
 -----
 
-0.1.6 支持微信小程序登录
-
-#### 微信小程序使用示例：
+### 微信小程序使用示例：
 
 [微信小程序登录文档](https://mp.weixin.qq.com/debug/wxadoc/dev/api/api-login.html)
 
