@@ -139,7 +139,8 @@ class Prpcrypt(object):
         @return: 加密得到的字符串
         """
         # 16位随机字符串添加到明文开头
-        text = self.get_random_str() + struct.pack("I", socket.htonl(len(text))) + text + appid
+        text = self.get_random_str() + struct.pack(
+            "I", socket.htonl(len(text))) + text + appid
         # 使用自定义的填充方式对明文进行补位填充
         pkcs7 = PKCS7Encoder()
         text = pkcs7.encode(text)
@@ -199,7 +200,8 @@ class WXBizMsgCrypt(object):
             self.key = base64.b64decode(sEncodingAESKey + "=")
             assert len(self.key) == 32
         except:
-            throw_exception("[error]: EncodingAESKey unvalid !", FormatException)
+            throw_exception("[error]: EncodingAESKey unvalid !",
+                            FormatException)
         self.token = sToken
         self.appid = sAppId
 
