@@ -2,75 +2,58 @@ python-weixin
 -----
 A Python client for the Weixin REST APIs
 
-0.1.6 支持微信小程序登录
------
-
-### 微信小程序使用示例：
-
-[微信小程序登录文档](https://mp.weixin.qq.com/debug/wxadoc/dev/api/api-login.html)
-
-``` python
-from weixin import WXAPPAPI
-
-api = WXAPPAPI(appid=APP_ID,
-                  app_secret=APP_SECRET)
-session_info = api.exchange_code_for_session_key(code=code)
-```
-
------
-
-0.1.5 添加 模板消息处理
------
-添加模板消息处理
-
-0.1.4 新增功能
------
-添加消息回复模块 加密解密模块
-
-0.1.3 新增功能
------
-支持 自定义公众号菜单管理（添加|删除）
-支持 客服管理（添加|修改|删除|获取）
-支持 发送客服消息
-支持 发送模板消息
-
-
-0.1.2 新增功能
------
-完善服务异常处理
-
-0.1.1 新增功能
------
-完善服务异常处理
-
-0.1.0 功能
------
-微信公众平台 和开放平台 支持
-
-
 Installation
 -----
+
+```
 pip install python-weixin
+```
 
 Requires
 -----
+
+```
 * requests
 * simplejson
 * six
 * lxml
 * xmltodict
 * pycrypto
+```
 
+#### 微信小程序使用示例：
+
+[微信小程序登录文档](https://mp.weixin.qq.com/debug/wxadoc/dev/api/api-login.html)
+
+微信小程序登录获取用户信息
+-----
+``` python
+from weixin import WXAPPAPI
+
+api = WXAPPAPI(appid=APP_ID,
+                  app_secret=APP_SECRET)
+session_info = api.exchange_code_for_session_key(code=code)
+
+# 获取session_info 后
+
+session_key = session_info.get('session_key')
+crypt = WXBizDataCrypt(WXAPP_APPID, session_key)
+
+# encrypted_data 包括敏感数据在内的完整用户信息的加密数据
+# iv 加密算法的初始向量
+# 这两个参数需要js获取
+user_info = crypt.decrypt(encrypted_data, iv)
+
+```
 
 Authentication
 -----
+
 Weixin API 使用 OAuth2 认证方式
 详情见: https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&lang=zh_CN
 
-
 ### Authenticating a user
 具体使用方法参考 sample app
-
 
 ### Using an access token
 获取到access token 后，可以使用token 获取 用户信息等:
@@ -111,15 +94,39 @@ api = WeixinMpAPI(access_token=access_token)
 user = api.user(openid="openid")
 ```
 
-#### 微信小程序使用示例：
+0.1.6 支持微信小程序登录
+-----
 
-``` python
-from weixin import WXAPPAPI
+添加微信小程序登录验证
 
-api = WXAPPAPI(appid=APP_ID,
-                  app_secret=APP_SECRET)
-session_info = api.exchange_code_for_session_key(code=code)
-```
+
+0.1.5 添加 模板消息处理
+-----
+添加模板消息处理
+
+0.1.4 新增功能
+-----
+添加消息回复模块 加密解密模块
+
+0.1.3 新增功能
+-----
+支持 自定义公众号菜单管理（添加|删除）
+支持 客服管理（添加|修改|删除|获取）
+支持 发送客服消息
+支持 发送模板消息
+
+
+0.1.2 新增功能
+-----
+完善服务异常处理
+
+0.1.1 新增功能
+-----
+完善服务异常处理
+
+0.1.0 功能
+-----
+微信公众平台 和开放平台 支持
 
 
 
