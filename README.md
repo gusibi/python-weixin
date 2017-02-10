@@ -94,6 +94,11 @@ api = WeixinMpAPI(access_token=access_token)
 user = api.user(openid="openid")
 ```
 
+0.1.7 完善python3 支持
+-----
+
+完善python3 支持
+
 0.1.6 支持微信小程序登录
 -----
 
