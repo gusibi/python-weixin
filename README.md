@@ -94,6 +94,9 @@ api = WeixinMpAPI(access_token=access_token)
 user = api.user(openid="openid")
 ```
 
+0.1.8 添加生成带参数的二维码 接口
+-----
+
 0.1.7 完善python3 支持
 -----
 

@@ -16,7 +16,7 @@ import json
 import requests
 from requests.exceptions import (ConnectTimeout, ReadTimeout,
                                  ConnectionError as _ConnectionError)
-from six.moves.urllib.parse import urlencode
+from six.moves.urllib.parse import urlencode, urlparse
 
 
 from .json_import import simplejson
@@ -232,24 +232,35 @@ class OAuth2Request(object):
         return self.make_request(self.prepare_request("POST", path, kwargs))
 
     def _full_url(self, path, include_secret=False):
-        return '%s://%s%s%s%s' % (self.api.protocol,
-                                  self.host,
-                                  self.api.base_path,
-                                  path,
-                                  self._auth_query(include_secret))
+        auth_query = self._auth_query(include_secret)
+        base_url = '%s://%s%s%s' % (self.api.protocol,
+                                    self.host,
+                                    self.api.base_path,
+                                    path)
+        if auth_query:
+            return '%s?%s' % (base_url, auth_query)
+        return base_url
 
     def _full_url_with_params(self, path, params, include_secret=False):
-        return (self._full_url(path, include_secret) +
-                self._full_query_with_params(params))
+        base_url = self._full_url(path, include_secret)
+        base_query = urlparse(base_url).query
+        other_query = self._full_query_with_params(params)
+        if base_query and other_query:
+            return '%s&%s' % (base_url, other_query)
+        elif other_query:
+            return '%s?%s' % (base_url, other_query)
+        else:
+            return base_url
 
     def _full_query_with_params(self, params):
-        params = ("&" + urlencode(params)) if params else ""
+        params = urlencode(params) if params else ""
         return params
 
     def _auth_query(self, include_secret=False):
         if self.api.access_token:
-            return ("?%s=%s" % (self.api.access_token_field,
+            return ("%s=%s" % (self.api.access_token_field,
                                 self.api.access_token))
+        return ''
 
     def _post_body(self, params):
         return urlencode(params)

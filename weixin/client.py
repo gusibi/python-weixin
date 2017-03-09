@@ -149,6 +149,11 @@ class WeixinMpAPI(oauth2.OAuth2API):
                                         accepts_parameters=['json_body'],
                                         response_type="entry")
 
+    qrcode = bind_method(path='/cgi-bin/qrcode/create',
+                         method='POST',
+                         accepts_parameters=['json_body'],
+                         response_type="entry")
+
 
 class WXAPPAPI(oauth2.OAuth2API):
 
