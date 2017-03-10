@@ -15,7 +15,7 @@ IMAGE_TEMPLATE = """
 <xml>
     <ToUserName><![CDATA[{to_user}]]></ToUserName>
     <FromUserName><![CDATA[{from_user}]]></FromUserName>
-    <CreateTime>{time}</CreateTime>
+    <CreateTime>{create_time}</CreateTime>
     <MsgType><![CDATA[image]]></MsgType>
     <Image>
         <MediaId><![CDATA[{media_id}]]></MediaId>
@@ -27,7 +27,7 @@ VOICE_TEMPLATE = """
 <xml>
     <ToUserName><![CDATA[{to_user}]]></ToUserName>
     <FromUserName><![CDATA[{from_user}]]></FromUserName>
-    <CreateTime>{time}</CreateTime>
+    <CreateTime>{create_time}</CreateTime>
     <MsgType><![CDATA[voice]]></MsgType>
     <Voice>
         <MediaId><![CDATA[{media_id}]]></MediaId>
@@ -39,7 +39,7 @@ VIDEO_TEMPLATE = """
 <xml>
     <ToUserName><![CDATA[{to_user}]]></ToUserName>
     <FromUserName><![CDATA[{from_user}]]></FromUserName>
-    <CreateTime>{time}</CreateTime>
+    <CreateTime>{create_time}</CreateTime>
     <MsgType><![CDATA[video]]></MsgType>
     <Video>
         <MediaId><![CDATA[{media_id}]]></MediaId>
@@ -53,7 +53,7 @@ THUM_MUSIC_TEMPLATE = """
 <xml>
     <ToUserName><![CDATA[{to_user}]]></ToUserName>
     <FromUserName><![CDATA[{from_user}]]></FromUserName>
-    <CreateTime>{time}</CreateTime>
+    <CreateTime>{create_time}</CreateTime>
     <MsgType><![CDATA[music]]></MsgType>
     <Music>
         <Title><![CDATA[{title}]]></Title>
@@ -69,7 +69,7 @@ NOTHUM_MUSIC_TEMPLATE = """
 <xml>
     <ToUserName><![CDATA[{to_user}]]></ToUserName>
     <FromUserName><![CDATA[{from_user}]]></FromUserName>
-    <CreateTime>{time}</CreateTime>
+    <CreateTime>{create_time}</CreateTime>
     <MsgType><![CDATA[music]]></MsgType>
     <Music>
         <Title><![CDATA[{title}]]></Title>
@@ -84,7 +84,7 @@ ARITICLE_TEMPLATE = """
 <xml>
     <ToUserName><![CDATA[{to_user}]]></ToUserName>
     <FromUserName><![CDATA[{from_user}]]></FromUserName>
-    <CreateTime>{time}</CreateTime>
+    <CreateTime>{create_time}</CreateTime>
     <MsgType><![CDATA[news]]></MsgType>
     <ArticleCount>{count}</ArticleCount>
     <Articles>{items}</Articles>

@@ -126,8 +126,8 @@ class ArticleReply(WXReply):
     TEMPLATE = ARITICLE_TEMPLATE
     ITEM_TEMPLATE = ARITICLE_ITEM_TEMPLATE
 
-    def __init__(self, message, **kwargs):
-        super(ArticleReply, self).__init__(message, **kwargs)
+    def __init__(self, **kwargs):
+        super(ArticleReply, self).__init__(**kwargs)
         self._articles = []
 
     def render(self):
