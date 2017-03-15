@@ -20,7 +20,8 @@ from six.moves.urllib.parse import urlencode, urlparse
 
 
 from .json_import import simplejson
-from .helper import error_parser, get_encoding, url_encode, iteritems, text_type
+from .helper import (error_parser, get_encoding, url_encode, iteritems,
+                     text_type, smart_str)
 
 
 TIMEOUT = 2
@@ -302,6 +303,7 @@ class OAuth2Request(object):
         if json_body:
             headers['Content-type'] = 'application/json'
             body = json.dumps(json_body, ensure_ascii=False)
+            body = smart_str(body)
         if xml_body:
             headers['Content-type'] = 'application/xml'
             #TODO xml
