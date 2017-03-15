@@ -5,7 +5,6 @@ from __future__ import unicode_literals
 
 import time
 
-from .helper import smart_str
 from .msg_template import (TEXT_TEMPLATE, IMAGE_TEMPLATE,
                            VOICE_TEMPLATE, VIDEO_TEMPLATE,
                            THUM_MUSIC_TEMPLATE, NOTHUM_MUSIC_TEMPLATE,
@@ -187,7 +186,7 @@ class CustomTextReply(WXCustomReply):
         """
         super(CustomTextReply, self).__init__(msgtype='text',
                                               *args, **kwargs)
-        self.content = smart_str(content)
+        self.content = content
 
     def render(self):
         self.params['text'] = {
