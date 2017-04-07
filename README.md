@@ -94,8 +94,54 @@ api = WeixinMpAPI(access_token=access_token)
 user = api.user(openid="openid")
 ```
 
+#### 微信支付使用示例:
+
+``` python
+from weixin.pay import WeixinPay
+
+wxpay = WeixinPay(appid='appid',
+		          mch_id='mchid',
+				  notify_url='url',
+				  partner_key='key')
+create_pay_info= {}
+
+# 统一下单
+wxpay.unifiedorder(**create_pay_info)
+# 查询订单
+wxapp.order_query(out_trade_no='out_trade_no')
+
+# 企业付款
+wxepay = WeixinEnterprisePay(appid='appid',
+		                     mch_id='mchid',
+							 mch_key='mch_key',
+							 mch_cert='mch_cert',
+				             partner_key='key')
+
+wxepay.transfers(partner_trade_no,
+		         openid,
+				 amount,
+		         desc=u'结算')
+
+# 企业付款查询
+wxepay_query = WeixinEnterprisePayQuery(appid='appid',
+		                                mch_id='mchid',
+							            mch_key='mch_key',
+							            mch_cert='mch_cert',
+				                        partner_key='key')
+wxepay_query.gettransferinfo(partner_trade_no)
+```
+
+0.2.0 添加微信支付 
+-----
+
+支付文档：https://pay.weixin.qq.com/wiki/doc/api/index.html
+
+添加微信支付
+
 0.1.8 添加生成带参数的二维码 接口
 -----
+
+ 添加生成带参数的二维码 接口
 
 0.1.7 完善python3 支持
 -----

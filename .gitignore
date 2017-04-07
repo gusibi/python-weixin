@@ -14,6 +14,7 @@ build/
 python_weixin.egg-info/
 dist/
 venv
+weixin/.ropeproject/
 
 # test
 test_example.py
