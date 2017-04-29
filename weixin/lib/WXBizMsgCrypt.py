@@ -6,6 +6,8 @@
 """
 # TODO 重构加密解密
 
+from imp import reload
+
 import base64
 import string
 import random
@@ -17,7 +19,8 @@ import xml.etree.cElementTree as ET
 import sys
 import socket
 reload(sys)
-import ierror
+
+from .import *
 
 
 class FormatException(Exception):
@@ -45,9 +48,9 @@ class SHA1:
             sortlist.sort()
             sha = hashlib.sha1()
             sha.update("".join(sortlist))
-            return ierror.WXBizMsgCrypt_OK, sha.hexdigest()
+            return WXBizMsgCrypt_OK, sha.hexdigest()
         except Exception:
-            return ierror.WXBizMsgCrypt_ComputeSignature_Error, None
+            return WXBizMsgCrypt_ComputeSignature_Error, None
 
 
 class XMLParse:
@@ -72,9 +75,9 @@ class XMLParse:
             xml_tree = ET.fromstring(xmltext)
             encrypt = xml_tree.find("Encrypt")
             touser_name = xml_tree.find("ToUserName")
-            return ierror.WXBizMsgCrypt_OK, encrypt.text, touser_name.text
+            return WXBizMsgCrypt_OK, encrypt.text, touser_name.text
         except Exception:
-            return ierror.WXBizMsgCrypt_ParseXml_Error, None, None
+            return WXBizMsgCrypt_ParseXml_Error, None, None
 
     def generate(self, encrypt, signature, timestamp, nonce):
         """生成xml消息
@@ -149,9 +152,9 @@ class Prpcrypt(object):
         try:
             ciphertext = cryptor.encrypt(text)
             # 使用BASE64对加密后的字符串进行编码
-            return ierror.WXBizMsgCrypt_OK, base64.b64encode(ciphertext)
+            return WXBizMsgCrypt_OK, base64.b64encode(ciphertext)
         except Exception:
-            return ierror.WXBizMsgCrypt_EncryptAES_Error, None
+            return WXBizMsgCrypt_EncryptAES_Error, None
 
     def decrypt(self, text, appid):
         """对解密后的明文进行补位删除
@@ -163,7 +166,7 @@ class Prpcrypt(object):
             # 使用BASE64对密文进行解码，然后AES-CBC解密
             plain_text = cryptor.decrypt(base64.b64decode(text))
         except Exception:
-            return ierror.WXBizMsgCrypt_DecryptAES_Error, None
+            return WXBizMsgCrypt_DecryptAES_Error, None
         try:
             pad = ord(plain_text[-1])
             # 去掉补位字符串
@@ -175,9 +178,9 @@ class Prpcrypt(object):
             xml_content = content[4:xml_len+4]
             from_appid = content[xml_len+4:]
         except Exception:
-            return ierror.WXBizMsgCrypt_IllegalBuffer, None
+            return WXBizMsgCrypt_IllegalBuffer, None
         if from_appid != appid:
-            return ierror.WXBizMsgCrypt_ValidateAppid_Error, None
+            return WXBizMsgCrypt_ValidateAppid_Error, None
         return 0, xml_content
 
     def get_random_str(self):
@@ -244,7 +247,7 @@ class WXBizMsgCrypt(object):
         if ret != 0:
             return ret, None
         if not signature == sMsgSignature:
-            return ierror.WXBizMsgCrypt_ValidateSignature_Error, None
+            return WXBizMsgCrypt_ValidateSignature_Error, None
         pc = Prpcrypt(self.key)
         ret, xml_content = pc.decrypt(encrypt, self.appid)
         return ret, xml_content

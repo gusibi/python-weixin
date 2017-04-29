@@ -13,7 +13,7 @@ import socket
 import requests
 import xmltodict
 
-from .helper import smart_str, smart_unicode, md5_constructor as md5
+from weixin.helper import smart_str, smart_unicode, md5_constructor as md5
 
 TIMEOUT = 5
 
@@ -101,7 +101,7 @@ class WeixinPay(object):
         _params = self.get_base_params()
         params.update(_params)
         newparams, prestr = params_filter(params)
-        sign = build_mysign(prestr, source=self.PAY_SOURCE)
+        sign = build_mysign(prestr, self.partner_key)
         # 将内容转化为unicode xmltodict 只支持unicode
         newparams = params_encoding(newparams)
         newparams['sign'] = sign
@@ -307,7 +307,7 @@ class WeixinAppPay(WeixinPay):
         _params = self.get_base_params()
         params.update(_params)
         newparams, prestr = params_filter(params)
-        sign = build_mysign(prestr, trade_type=params.get('trade_type'))
+        sign = build_mysign(prestr, key=self.partner_key)
         # 将内容转化为unicode xmltodict 只支持unicode
         newparams = params_encoding(newparams)
         newparams['sign'] = sign
