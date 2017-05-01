@@ -9,7 +9,6 @@
 from imp import reload
 
 import base64
-import string
 import random
 import hashlib
 import time
@@ -18,9 +17,12 @@ from Crypto.Cipher import AES
 import xml.etree.cElementTree as ET
 import sys
 import socket
+
 reload(sys)
 
-from .import *
+from .ierror import *
+
+from weixin.helper import smart_str, safe_char
 
 
 class FormatException(Exception):
@@ -47,7 +49,7 @@ class SHA1:
             sortlist = [token, timestamp, nonce, encrypt]
             sortlist.sort()
             sha = hashlib.sha1()
-            sha.update("".join(sortlist))
+            sha.update(str("".join(sortlist)).encode('utf-8'))
             return WXBizMsgCrypt_OK, sha.hexdigest()
         except Exception:
             return WXBizMsgCrypt_ComputeSignature_Error, None
@@ -142,8 +144,8 @@ class Prpcrypt(object):
         @return: 加密得到的字符串
         """
         # 16位随机字符串添加到明文开头
-        text = self.get_random_str() + struct.pack(
-            "I", socket.htonl(len(text))) + text + appid
+        pack_str = smart_str(struct.pack("I", socket.htonl(len(text))))
+        text = self.get_random_str() + pack_str + text + appid
         # 使用自定义的填充方式对明文进行补位填充
         pkcs7 = PKCS7Encoder()
         text = pkcs7.encode(text)
@@ -168,7 +170,7 @@ class Prpcrypt(object):
         except Exception:
             return WXBizMsgCrypt_DecryptAES_Error, None
         try:
-            pad = ord(plain_text[-1])
+            pad = plain_text[-1]
             # 去掉补位字符串
             # pkcs7 = PKCS7Encoder()
             # plain_text = pkcs7.encode(plain_text)
@@ -176,7 +178,7 @@ class Prpcrypt(object):
             content = plain_text[16:-pad]
             xml_len = socket.ntohl(struct.unpack("I", content[:4])[0])
             xml_content = content[4:xml_len+4]
-            from_appid = content[xml_len+4:]
+            from_appid = smart_str(content[xml_len+4:])
         except Exception:
             return WXBizMsgCrypt_IllegalBuffer, None
         if from_appid != appid:
@@ -187,9 +189,9 @@ class Prpcrypt(object):
         """ 随机生成16位字符串
         @return: 16位字符串
         """
-        rule = string.letters + string.digits
-        str = random.sample(rule, 16)
-        return "".join(str)
+        str_list = random.sample(safe_char[:-4], 16)
+        sl = [chr(s) for s in str_list]
+        return "".join(sl)
 
 
 class WXBizMsgCrypt(object):
