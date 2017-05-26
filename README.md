@@ -241,3 +241,8 @@ API 列表
 
 消息体见官方参考文档:
 [模板消息](https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1433751277&token=&lang=zh_CN)
+
+#### 觉得有用，可以赞赏一下（也欢迎转发）
+![喜欢也可以微信打赏一下](http://omuo4kh1k.bkt.clouddn.com/qn-FaCXmUz7zHtZgN4Je1CEE94ibt5cZRr3_iavTVsMioCR83oNa8d4pq1fgo84y)
+
+
