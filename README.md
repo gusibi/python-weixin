@@ -1,6 +1,12 @@
 python-weixin
 -----
+![](https://img.shields.io/github/forks/gusibi/python-weixin.svg) 
+![](https://img.shields.io/github/stars/gusibi/python-weixin.svg)
+![](https://img.shields.io/github/issues/gusibi/python-weixin.svg)
+![](https://img.shields.io/badge/license-New%20BSD-blue.svg)
+-----
 A Python client for the Weixin REST APIs
+
 
 Installation
 -----
