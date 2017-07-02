@@ -22,7 +22,7 @@ reload(sys)
 
 from .ierror import *
 
-from weixin.helper import smart_str, safe_char
+from weixin.helper import smart_bytes, safe_char
 
 
 class FormatException(Exception):
@@ -115,7 +115,7 @@ class PKCS7Encoder():
         if amount_to_pad == 0:
             amount_to_pad = self.block_size
         # 获得补位所用的字符
-        pad = chr(amount_to_pad)
+        pad = smart_bytes(chr(amount_to_pad))
         return text + pad * amount_to_pad
 
     def decode(self, decrypted):
@@ -144,8 +144,8 @@ class Prpcrypt(object):
         @return: 加密得到的字符串
         """
         # 16位随机字符串添加到明文开头
-        pack_str = smart_str(struct.pack("I", socket.htonl(len(text))))
-        text = self.get_random_str() + pack_str + text + appid
+        pack_str = struct.pack(b"I", socket.htonl(len(text)))
+        text = smart_bytes(self.get_random_str()) + pack_str + smart_bytes(text) + smart_bytes(appid)
         # 使用自定义的填充方式对明文进行补位填充
         pkcs7 = PKCS7Encoder()
         text = pkcs7.encode(text)
@@ -174,14 +174,14 @@ class Prpcrypt(object):
             # 去掉补位字符串
             # pkcs7 = PKCS7Encoder()
             # plain_text = pkcs7.encode(plain_text)
-            #  去除16位随机字符串
+            # 去除16位随机字符串
             content = plain_text[16:-pad]
-            xml_len = socket.ntohl(struct.unpack("I", content[:4])[0])
+            xml_len = socket.ntohl(struct.unpack(b"I", content[:4])[0])
             xml_content = content[4:xml_len+4]
-            from_appid = smart_str(content[xml_len+4:])
+            from_appid = smart_bytes(content[xml_len+4:])
         except Exception:
             return WXBizMsgCrypt_IllegalBuffer, None
-        if from_appid != appid:
+        if from_appid != smart_bytes(appid):
             return WXBizMsgCrypt_ValidateAppid_Error, None
         return 0, xml_content
 
