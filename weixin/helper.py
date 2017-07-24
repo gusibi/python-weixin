@@ -24,6 +24,7 @@ PY2 = sys.version_info[0] == 2
 _always_safe = (b'abcdefghijklmnopqrstuvwxyz'
                 b'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.-+')
 
+safe_char = _always_safe
 
 error_dict = {
     'AppID 参数错误': {
@@ -236,8 +237,8 @@ def genarate_js_signature(params):
 
 def genarate_signature(params):
     sorted_params = sorted([v for k, v in params.items()])
-    params_str = ''.join(sorted_params)
-    return sha1(params_str).hexdigest()
+    params_str = smart_str(''.join(sorted_params))
+    return sha1(str(params_str).encode('utf-8')).hexdigest()
 
 
 def get_encoding(html=None, headers=None):
