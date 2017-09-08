@@ -12,6 +12,7 @@ from .msg_template import (TEXT_TEMPLATE, IMAGE_TEMPLATE,
 
 
 class Article(object):
+
     def __init__(self, title=None, description=None, picurl=None, url=None):
         self.title = title or ''
         self.description = description or ''
@@ -58,11 +59,11 @@ class ImageReply(WXReply):
     """
     TEMPLATE = IMAGE_TEMPLATE
 
-    def __init__(self, media_id):
+    def __init__(self, media_id, *args, **kwargs):
         """
         :param media_id: 图片的 MediaID
         """
-        super(ImageReply, self).__init__(media_id=media_id)
+        super(ImageReply, self).__init__(media_id=media_id, *args, **kwargs)
 
     def render(self):
         return self.TEMPLATE.format(**self.params)
@@ -74,11 +75,11 @@ class VoiceReply(WXReply):
     """
     TEMPLATE = VOICE_TEMPLATE
 
-    def __init__(self, media_id):
+    def __init__(self, media_id, *args, **kwargs):
         """
         :param media_id: 语音的 MediaID
         """
-        super(VoiceReply, self).__init__(media_id=media_id)
+        super(VoiceReply, self).__init__(media_id=media_id, *args, **kwargs)
 
     def render(self):
         return self.TEMPLATE.format(**self.params)
@@ -91,7 +92,8 @@ class VideoReply(WXReply):
 
     TEMPLATE = VIDEO_TEMPLATE
 
-    def __init__(self, media_id, title=None, description=None):
+    def __init__(self, media_id, title=None, description=None,
+                 *args, **kwargs):
         """
         :param media_id: 视频的 MediaID
         :param title: 视频消息的标题
@@ -100,7 +102,8 @@ class VideoReply(WXReply):
         title = title or ''
         description = description or ''
         super(VideoReply, self).__init__(media_id=media_id, title=title,
-                                         description=description)
+                                         description=description,
+                                         *args, **kwargs)
 
     def render(self):
         return self.TEMPLATE.format(**self.params)
@@ -114,20 +117,23 @@ class MusicReply(WXReply):
     TEMPLATE_NOTHUMB = NOTHUM_MUSIC_TEMPLATE
 
     def __init__(self, title='', description='', music_url='',
-                 hq_music_url='', thumb_media_id=None):
-        title = title or ''
-        description = description or ''
-        music_url = music_url or ''
-        hq_music_url = hq_music_url or music_url
+                 hq_music_url='', thumb_media_id=None, *args, **kwargs):
+        self.title = title or ''
+        self.description = description or ''
+        self.music_url = music_url or ''
+        self.hq_music_url = hq_music_url or music_url
+        self.thumb_media_id = thumb_media_id or ''
         super(MusicReply, self).__init__(
-            title=title, description=description, music_url=music_url,
-            hq_music_url=hq_music_url, thumb_media_id=thumb_media_id)
+            title=self.title, description=self.description,
+            music_url=self.music_url,
+            hq_music_url=self.hq_music_url,
+            thumb_media_id=self.thumb_media_id)
 
     def render(self):
-        if self._args['thumb_media_id']:
-            return self.TEMPLATE.format(**self.params)
+        if self.thumb_media_id:
+            return self.TEMPLATE_THUMB.format(**self.params)
         else:
-            return self.TEMPLATE.format(**self.params)
+            return self.TEMPLATE_NOTHUMB.format(**self.params)
 
 
 class ArticleReply(WXReply):
