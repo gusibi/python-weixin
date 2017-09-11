@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 __title__ = 'requests'
-__version__ = '0.0.2'
-__author__ = 'Zongxiao Cheng'
+__version__ = '0.2.3'
+__author__ = 'gusibi'
 __license__ = 'BSD'
 
 
