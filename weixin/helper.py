@@ -1,6 +1,5 @@
 # -*-coding: utf-8 -*-
 # !/usr/bin/env python
-from __future__ import unicode_literals
 
 """
 File:   client.py
@@ -21,8 +20,8 @@ from six.moves import html_parser
 
 PY2 = sys.version_info[0] == 2
 
-_always_safe = (b'abcdefghijklmnopqrstuvwxyz'
-                b'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.-+')
+_always_safe = ('abcdefghijklmnopqrstuvwxyz'
+                'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.-+')
 
 safe_char = _always_safe
 

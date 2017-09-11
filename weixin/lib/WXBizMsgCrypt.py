@@ -170,7 +170,10 @@ class Prpcrypt(object):
         except Exception:
             return WXBizMsgCrypt_DecryptAES_Error, None
         try:
-            pad = ord(plain_text[-1])
+            if not isinstance(plain_text[-1], int):
+                pad = ord(plain_text[-1])
+            else:
+                pad = plain_text[-1]
             # 去掉补位字符串
             # pkcs7 = PKCS7Encoder()
             # plain_text = pkcs7.encode(plain_text)
@@ -189,7 +192,9 @@ class Prpcrypt(object):
         """ 随机生成16位字符串
         @return: 16位字符串
         """
+        print(safe_char)
         str_list = random.sample(safe_char[:-4], 16)
+        print(str_list)
         return "".join(str_list)
 
 
