@@ -206,11 +206,11 @@ class CustomImageReply(WXCustomReply):
     回复图片消息
     """
 
-    def __init__(self, media_id):
+    def __init__(self, media_id, *args, **kwargs):
         """
         :param media_id: 图片的 MediaID
         """
-        super(CustomImageReply, self).__init__(msgtype='image')
+        super(CustomImageReply, self).__init__(msgtype='image', *args, **kwargs)
         self.media_id = media_id
 
     def render(self):
@@ -225,11 +225,12 @@ class CustomVoiceReply(WXCustomReply):
     回复语音消息
     """
 
-    def __init__(self, media_id):
+    def __init__(self, media_id, *args, **kwargs):
         """
         :param media_id: 语音的 MediaID
         """
-        super(CustomVoiceReply, self).__init__(msgtype='voice')
+        super(CustomVoiceReply, self).__init__(msgtype='voice',
+                                               *args, **kwargs)
         self.media_id = media_id
 
     def render(self):
@@ -244,13 +245,14 @@ class CustomVideoReply(WXCustomReply):
     回复视频消息
     """
 
-    def __init__(self, media_id, title=None, description=None):
+    def __init__(self, media_id, title=None, description=None,
+                 *args, **kwargs):
         """
         :param media_id: 视频的 MediaID
         :param title: 视频消息的标题
         :param description: 视频消息的描述
         """
-        super(CustomVideoReply, self).__init__(msgtype='music')
+        super(CustomVideoReply, self).__init__(msgtype='music', *args, **kwargs)
         self.media_id = media_id
         self.title = title or ''
         self.description = description or ''
@@ -270,13 +272,15 @@ class CustomMusicReply(WXCustomReply):
     """
 
     def __init__(self, title='', description='', music_url='',
-                 hq_music_url='', thumb_media_id=None):
+                 hq_music_url='', thumb_media_id=None,
+                 *args, **kwargs):
         self.title = title or ''
         self.description = description or ''
         self.musicurl = music_url or ''
         self.hqmusicurl = hq_music_url or music_url
         self.thumb_media_id = thumb_media_id
-        super(CustomMusicReply, self).__init__(msgtype='music')
+        super(CustomMusicReply, self).__init__(msgtype='music',
+                                               *args, **kwargs)
 
     def render(self):
         self.params['music'] = {

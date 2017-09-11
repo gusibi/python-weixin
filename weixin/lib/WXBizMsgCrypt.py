@@ -190,8 +190,7 @@ class Prpcrypt(object):
         @return: 16位字符串
         """
         str_list = random.sample(safe_char[:-4], 16)
-        sl = [chr(s) for s in str_list]
-        return "".join(sl)
+        return "".join(str_list)
 
 
 class WXBizMsgCrypt(object):
