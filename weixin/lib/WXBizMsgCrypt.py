@@ -192,9 +192,7 @@ class Prpcrypt(object):
         """ 随机生成16位字符串
         @return: 16位字符串
         """
-        print(safe_char)
         str_list = random.sample(safe_char[:-4], 16)
-        print(str_list)
         return "".join(str_list)
 
 
