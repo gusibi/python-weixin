@@ -1,12 +1,19 @@
 python-weixin
 -----
-![](https://img.shields.io/badge/version-0.2.1--dev-FF00CC.svg)
+![](https://img.shields.io/badge/version-0.3.0--dev-FF00CC.svg)
 ![](https://img.shields.io/github/forks/gusibi/python-weixin.svg) 
 ![](https://img.shields.io/github/stars/gusibi/python-weixin.svg)
 ![](https://img.shields.io/github/issues/gusibi/python-weixin.svg)
 ![](https://img.shields.io/badge/license-New%20BSD-blue.svg)
 -----
+
 A Python client for the Weixin REST APIs
+
+## Compatibility
+
+|component|compatibility|
+|-----|-----|
+|Python|2.\*, 3.\*|
 
 
 Installation
