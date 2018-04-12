@@ -43,6 +43,7 @@ Requires
 -----
 ``` python
 from weixin import WXAPPAPI
+from weixin.lib.wxcrypt import WXBizDataCrypt
 
 api = WXAPPAPI(appid=APP_ID,
                   app_secret=APP_SECRET)
