@@ -41,6 +41,9 @@ Requires
 
 微信小程序登录获取用户信息
 -----
+
+[Python 实现小程序登录注册](https://mp.weixin.qq.com/s?__biz=MzAwNjI5MjAzNw==&mid=2655752024&idx=1&sn=cb02c316b9e1b569b6da41b15d348d9a&chksm=80b0b872b7c73164335ebb93c9da45d0840068170a3749d3f285ac95a54734c34afa08c1ad0b#rd)
+
 ``` python
 from weixin import WXAPPAPI
 from weixin.lib.wxcrypt import WXBizDataCrypt
