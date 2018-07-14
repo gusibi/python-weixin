@@ -1,7 +1,7 @@
-simplejson==3.6.3
+simplejson
 requests==2.4.1
 chardet==2.3.0
-six==1.8.0
+six
 lxml
 xmltodict
 pycrypto
