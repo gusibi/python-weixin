@@ -1,16 +1,15 @@
 language: python
 python:
-  - '2.7'
-  - '3.5'
+- '2.7'
+- '3.5'
 install:
-  - pip install -r requirements.txt
-script:
-    python test_example.py
+- pip install -r requirements.txt
+script: python test_example.py
 deploy:
   provider: pypi
   user: goodspeed
   password:
-    secure: H/8GSzlPf1rFWyfKg+9CpoL6npvxQx3Q9vuqMuD4pJ2PpDRJtkZzXqa5shUBzQORki8BEc72eUJaqywV1JtN0ESWFC16qcerd5MRQsfI4O9tZLl8DAe9qCZuY1/w5Fx0F0mPQLH1FlqPzMRwIwH0hlymB6mrIbu5Psrw6L/UH2vGqJeD9VUUJ0gvAKhkKcTcmDfGMpWn10qsJzgPBF/CbD3F8pMknzMFa8dHEI8qqAYimPanGjaS1aXuPxHNX1HJ/k6pLAFoargs6Dxuo9E+/cTZe51D9dCqUF1AN7o4zFm4cdDDtdPvT81dOEE5XMINVu2QxRCLlbT+9qjco4EYnpl8kVpcM/YfZzQakgWcEp3+EBjjADOu/YF+RrYTSYrqDWrejeV7Iwi34BSIxairJhcZdThkG8aVPKqPP8tEhn2RZvXdtl175LN5TSX90ArkWsEAjb4WIr9xG2DO839UnoxyIX+wY7ux/sorM5tMgKDg9WZYpg12TrTJLH/gDbLFTmKEV7HSH9QU0acjsh9iZxSqRj5r+NOUqU5f2VTsrDaUNi7/YnEY3U45mrK4UmbOhIKhgE5JtWoj9CtrUxDeLzrESzjIspR9AO+NclmqL/EOUF51DDl8qZeqogq+d/IRaK1bW+xQHk2vxwnonPr16emOpo8/eNkHCzYIrNf8lak=
+    secure: eLs2qPU9w8lBdH2nzPeaCdaVs8A6z6Z0OAjW674pJ/du7AXHGlIbZwIt47JOOmA9xnKi5HBZ0C+80DkSTAN5vUftQyKTQj0mdGU2gTo2Bh9qbdiJpylm3zlm35GO25FheB7n5eYADJTTibkjqicR11jRtFZcKZbYdemgAgChdy86Re9+6Y4E6puMX+t4OSz93qTwz/R2lP5CJHQGh2vGXnqrcJES+rCD1KDhy2ykzzBoZc5Eq8LH9ouW7Cax6smt8iTVUpkW2STMM0Ivdu7GXeSouGZ74tD9X76rwrqAnWT/1Prhf9DisfU0AJsFStcnYKMlFp75KFFQXUM4regTKyw30CAibxsuh1U1DBYdt3O36qAVpYrynJKMZ9ofzisKDBUl5sSHY1II468koclkIJrsssK6Qm+ogwBgCUIUyH07AsFuFqaLQOMgcVtzfUvSH7W82MQlsqd02J0ji8kav7jkyU+x+L3TnHmu/nhq1RXBDwR7B7r7YDrUy07dNkdQYUhQ9aN+7VVWxcLWNON3AiVyrOxG/kuu/1vqsxtgglOUlBvHEoXPWZNwg+793EFEY0Wqg82PyOZ3/LVCqyM7Kfnh9QAp1hNUo6iv8QZX6G3IlRrlr2LrB4lz9iXnpC+bbmZ11Cpkg+BgFL3jvcnDRX6rqv5RBEQ0azZ+NkIcXYE=
 true:
   pythoni: 2.7
   tags: true
