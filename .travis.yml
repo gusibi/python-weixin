@@ -1,0 +1,13 @@
+language: python
+python:
+- '2.7'
+- '3.5'
+deploy:
+  provider: pypi
+  user: goodspeed
+  password:
+    secure: H/8GSzlPf1rFWyfKg+9CpoL6npvxQx3Q9vuqMuD4pJ2PpDRJtkZzXqa5shUBzQORki8BEc72eUJaqywV1JtN0ESWFC16qcerd5MRQsfI4O9tZLl8DAe9qCZuY1/w5Fx0F0mPQLH1FlqPzMRwIwH0hlymB6mrIbu5Psrw6L/UH2vGqJeD9VUUJ0gvAKhkKcTcmDfGMpWn10qsJzgPBF/CbD3F8pMknzMFa8dHEI8qqAYimPanGjaS1aXuPxHNX1HJ/k6pLAFoargs6Dxuo9E+/cTZe51D9dCqUF1AN7o4zFm4cdDDtdPvT81dOEE5XMINVu2QxRCLlbT+9qjco4EYnpl8kVpcM/YfZzQakgWcEp3+EBjjADOu/YF+RrYTSYrqDWrejeV7Iwi34BSIxairJhcZdThkG8aVPKqPP8tEhn2RZvXdtl175LN5TSX90ArkWsEAjb4WIr9xG2DO839UnoxyIX+wY7ux/sorM5tMgKDg9WZYpg12TrTJLH/gDbLFTmKEV7HSH9QU0acjsh9iZxSqRj5r+NOUqU5f2VTsrDaUNi7/YnEY3U45mrK4UmbOhIKhgE5JtWoj9CtrUxDeLzrESzjIspR9AO+NclmqL/EOUF51DDl8qZeqogq+d/IRaK1bW+xQHk2vxwnonPr16emOpo8/eNkHCzYIrNf8lak=
+true:
+  pythoni: 2.7
+  tags: true
+  branch: master

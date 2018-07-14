@@ -1,6 +1,6 @@
 python-weixin
 -----
-![](https://img.shields.io/badge/version-0.3.0--dev-FF00CC.svg)
+![](https://img.shields.io/badge/version-0.3.2--dev-FF00CC.svg)
 ![](https://img.shields.io/github/forks/gusibi/python-weixin.svg) 
 ![](https://img.shields.io/github/stars/gusibi/python-weixin.svg)
 ![](https://img.shields.io/github/issues/gusibi/python-weixin.svg)

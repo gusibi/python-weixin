@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(name="python-weixin",
-      version="0.3.1",
+      version="0.3.2",
       description="Python Weixin API client support wechat-app",
       long_description=long_description,
       long_description_content_type="text/markdown",
