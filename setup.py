@@ -4,6 +4,9 @@ from setuptools import setup, find_packages
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+with open('requirements.txt') as f:
+    requirements = [l for l in f.read().splitlines() if l]
+
 setup(name="python-weixin",
       version="0.3.2",
       description="Python Weixin API client support wechat-app",
