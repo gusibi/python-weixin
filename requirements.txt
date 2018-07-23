@@ -1,6 +1,6 @@
 simplejson
-requests==2.4.1
-chardet==2.3.0
+requests
+chardet
 six
 lxml
 xmltodict
