@@ -8,7 +8,7 @@ with open('requirements.txt') as f:
     requirements = [l for l in f.read().splitlines() if l]
 
 setup(name="python-weixin",
-      version="0.3.3",
+      version="0.3.4",
       description="Python Weixin API client support wechat-app",
       long_description=long_description,
       long_description_content_type="text/markdown",
