@@ -1,14 +1,16 @@
 #!/usr/bin/env python
+from io import open
+
 from setuptools import setup, find_packages
 
-with open("README.md", "r") as fh:
+with open("README.md", "r", encoding='utf-8') as fh:
     long_description = fh.read()
 
 with open('requirements.txt') as f:
     requirements = [l for l in f.read().splitlines() if l]
 
 setup(name="python-weixin",
-      version="0.4.0",
+      version="0.4.1",
       description="Python Weixin API client support wechat-app",
       long_description=long_description,
       long_description_content_type="text/markdown",
