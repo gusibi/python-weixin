@@ -14,7 +14,7 @@ import six
 import requests
 import xmltodict
 
-from weixin.helper import smart_str, smart_unicode, md5_constructor as md5
+from weixin.helper import smart_bytes, smart_unicode, md5_constructor as md5
 
 TIMEOUT = 5
 
@@ -49,9 +49,9 @@ def params_filter(params, delimiter='&', charset='utf-8',
         charset = params['input_charset']
     for k in ks:
         v = params[k]
-        k = smart_str(k, charset)
+        k = smart_bytes(k, charset)
         if k not in excludes and v != '':
-            newparams[k] = smart_str(v, charset)
+            newparams[k] = smart_bytes(v, charset)
             prestr += '%s=%s%s' % (k, newparams[k], delimiter)
     prestr = prestr[:-1]
     return newparams, prestr
@@ -112,7 +112,7 @@ class WeixinPay(object):
         newparams = params_encoding(newparams)
         newparams['sign'] = sign
         xml_dict = {'xml': newparams}
-        kwargs['data'] = smart_str(xmltodict.unparse(xml_dict))
+        kwargs['data'] = smart_bytes(xmltodict.unparse(xml_dict))
         url = self._full_url(path)
         if self.mch_cert and self.mch_key:
             kwargs['cert'] = (self.mch_cert, self.mch_key)
@@ -318,7 +318,7 @@ class WeixinAppPay(WeixinPay):
         newparams = params_encoding(newparams)
         newparams['sign'] = sign
         xml_dict = {'xml': newparams}
-        kwargs['data'] = smart_str(xmltodict.unparse(xml_dict))
+        kwargs['data'] = smart_bytes(xmltodict.unparse(xml_dict))
         url = self._full_url(path)
         if self.mch_cert and self.mch_key:
             kwargs['cert'] = (self.mch_cert, self.mch_key)
