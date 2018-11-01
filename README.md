@@ -1,7 +1,7 @@
 python-weixin
 -----
 ![Build Status](https://travis-ci.org/gusibi/python-weixin.svg?branch=master)
-![](https://img.shields.io/badge/version-0.4.2--dev-FF00CC.svg)
+![](https://img.shields.io/badge/version-0.4.3--dev-FF00CC.svg)
 ![](https://img.shields.io/github/forks/gusibi/python-weixin.svg) 
 ![](https://img.shields.io/github/stars/gusibi/python-weixin.svg)
 ![](https://img.shields.io/github/issues/gusibi/python-weixin.svg)
