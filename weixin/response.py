@@ -5,7 +5,7 @@ from .reply import TextReply
 from .config import AUTO_REPLY_CONTENT
 
 
-ALLOWED_MSG_TYPES = set(['text', 'image', 'voice', 'video',
+ALLOWED_MSG_TYPES = set(['text', 'image', 'voice', 'video', 'miniprogrampage',
                          'shortvideo', 'location', 'link'])
 ALLOWED_EVENTS = set(['subscribe', 'unsubscribe', 'unsub_scan',
                       'scan', 'click', 'location', 'view',
@@ -108,6 +108,10 @@ class WXResponse(object):
         # 链接消息处理逻辑
         pass
 
+    def _miniprogrampage_msg_handler(self):
+        # 小程序卡片处理逻辑
+        pass
+
     def _data_handler(self):
         # 只取出消息类型和事件
         msg_type = self.data.get('MsgType')
@@ -116,6 +120,8 @@ class WXResponse(object):
         event = None
         if msg_type == 'event':
             event = self.check_event()
+        elif msg_type == 'miniprogrampage':
+            event = 'miniprogrampage'
         return msg_type, event
 
     def _event_handler(self, event):
