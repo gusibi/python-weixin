@@ -101,6 +101,8 @@ class OAuth2API(object):
         return req.exchange_for_access_token(refresh_token=refresh_token)
 
     def exchange_code_for_session_key(self, code):
+        if not code:
+            raise OAuth2AuthExchangeError("Invalid code")
         req = OAuth2AuthExchangeRequest(self)
         return req.exchange_for_session_key(js_code=code)
 

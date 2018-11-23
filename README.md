@@ -31,7 +31,6 @@ Requires
 * requests
 * simplejson
 * six
-* lxml
 * xmltodict
 * pycrypto
 ```

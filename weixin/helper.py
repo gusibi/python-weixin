@@ -358,14 +358,3 @@ def error_parser(error_html, encoding='gbk'):
     error_parser.feed(html)
     if error_parser.data:
         return error_dict.get(error_parser.data[0], None)
-
-
-def validate_xml(xml):
-    """
-    使用lxml.etree.parse 检测xml是否符合语法规范
-    """
-    from lxml import etree
-    try:
-        return etree.parse(xml)
-    except etree.XMLSyntaxError:
-        return False
