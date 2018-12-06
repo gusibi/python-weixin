@@ -32,7 +32,7 @@ def generate_nonce_str(length=32):
 def params_encoding(params, charset='utf-8'):
     newparams = {}
     for k, v in params.items():
-        newparams[k] = smart_unicode(v)
+        newparams[smart_unicode(k)] = smart_unicode(v)
     return newparams
 
 
@@ -49,10 +49,12 @@ def params_filter(params, delimiter='&', charset='utf-8',
         charset = params['input_charset']
     for k in ks:
         v = params[k]
-        k = smart_bytes(k, charset)
         if k not in excludes and v != '':
-            newparams[k] = smart_bytes(v, charset)
-            prestr += '%s=%s%s' % (k, newparams[k], delimiter)
+            newparams[k] = v
+            if six.PY3:
+                k = smart_unicode(k)
+                v = smart_unicode(v)
+            prestr += '%s=%s%s' % (k, v, delimiter)
     prestr = prestr[:-1]
     return newparams, prestr
 
