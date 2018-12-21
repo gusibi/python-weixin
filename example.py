@@ -16,10 +16,10 @@ api = WeixinAPI(appid=APP_ID,
                 redirect_uri=REDIRECT_URI)
 
 try:
-    print api.get_authorize_login_url(scope=("snsapi_login",))
-    print api.exchange_code_for_access_token(code=code)
-except OAuth2AuthExchangeError, e:
-    print e
+    print(api.get_authorize_login_url(scope=("snsapi_login",)))
+    print(api.exchange_code_for_access_token(code=code))
+except OAuth2AuthExchangeError as e:
+    print(e)
 
 auth_info = {
     'access_token': 'OezXcEiiBSKSxW0eoylIeGXVgVFIUy2pK5I7TVatC5MGtVqTIWjtyV5Pax8ZLiWw-NdEN9dPkEX8Yewsve2AktmzS0gmbvzRKO49l6sxHRfhXg1no5ObdGufYhRIubP2m3FUdv-Cop3t3S_xwMbBWQ',
@@ -28,11 +28,11 @@ auth_info = {
     'expires_in': 7200,
     'scope': u'snsapi_login'}
 
-print api.exchange_refresh_token_for_access_token(refresh_token=auth_info['refresh_token'])
+print(api.exchange_refresh_token_for_access_token(refresh_token=auth_info['refresh_token']))
 
 api = WeixinAPI(access_token=auth_info['access_token'])
 
 r = api.user(openid=auth_info['openid'])
-print r
+print(r)
 v = api.validate_token(openid=auth_info['openid'])
-print v
+print(v)

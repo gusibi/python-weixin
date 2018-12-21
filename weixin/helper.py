@@ -295,7 +295,8 @@ def url_quote(string, charset='utf-8', errors='strict', safe='/:', unsafe=''):
         safe = safe.encode(charset, errors)
     if isinstance(unsafe, text_type):
         unsafe = unsafe.encode(charset, errors)
-    safe = frozenset(bytearray(safe) + _always_safe) - frozenset(bytearray(unsafe))
+    always_safe = _always_safe.encode(charset, errors)
+    safe = frozenset(bytearray(safe) + always_safe) - frozenset(bytearray(unsafe))
     rv = bytearray()
     for char in bytearray(string):
         if char in safe:
