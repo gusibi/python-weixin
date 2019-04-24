@@ -3,4 +3,4 @@ requests
 chardet
 six
 xmltodict
-pycrypto
+pycryptodome
