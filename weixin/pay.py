@@ -216,7 +216,7 @@ class WeixinPay(object):
                out_trade_no='', transaction_id='',
                device_info='', refund_fee_type='CNY'):
         """
-        退款查询接口
+        退款接口
         https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_4
         :param out_refund_no: 商户退款单号
         :param total_fee: 总金额

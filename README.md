@@ -32,12 +32,18 @@ Requires
 * simplejson
 * six
 * xmltodict
-* pycrypto
+* pycryptodome
 ```
 
-#### 微信小程序使用示例：
+### [快速入门](https://github.com/gusibi/python-weixin/wiki/%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B)
 
-[微信小程序登录文档](https://mp.weixin.qq.com/debug/wxadoc/dev/api/api-login.html)
+* [微信公众平台](https://github.com/gusibi/python-weixin/wiki/%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%B9%B3%E5%8F%B0)
+* [微信授权](https://github.com/gusibi/python-weixin/wiki/%E5%BE%AE%E4%BF%A1%E6%8E%88%E6%9D%83)
+* [微信支付](https://github.com/gusibi/python-weixin/wiki/%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98)
+
+### 微信小程序使用示例：
+
+[微信小程序登录文档](https://developers.weixin.qq.com/miniprogram/dev/api/wx.login.html)
 
 微信小程序登录获取用户信息
 -----
@@ -209,4 +215,4 @@ API 列表
 [模板消息](https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1433751277&token=&lang=zh_CN)
 
 #### 有问题可以在公号讨论
-![关注公号](http://media.gusibi.mobi/kel2L88yf9YXZYecLIn0LPZPSXc7zJfHyGUz5biWsZrGh7xF2JONZT93dgClGdMn)
+![关注公号](http://media.gusibi.mobi/ASlCYThVMfqenyMHXATIbnBew5Fyt8D3Y2l6k0fL4kZuIs0zzUUT21BCpOm51o2R)
