@@ -5,7 +5,7 @@ from weixin import WxAppCloudAPI
 
 appid = environ.get("WXAPP_APPID", "appid")
 secret = environ.get("WXAPP_SECRET", "secret")
-env = "test-68f865"
+env = "test-id"
 
 example_db = path.abspath(path.join(path.dirname(__file__), "./example_db"))
 
