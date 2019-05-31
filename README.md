@@ -35,7 +35,7 @@ Requires
 * pycryptodome
 ```
 
-### [快速入门](https://github.com/gusibi/python-weixin/wiki/%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B)
+### [快速入门](https://github.com/gusibi/python-weixin/wiki)
 
 * [微信公众平台](https://github.com/gusibi/python-weixin/wiki/%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%B9%B3%E5%8F%B0)
 * [微信授权](https://github.com/gusibi/python-weixin/wiki/%E5%BE%AE%E4%BF%A1%E6%8E%88%E6%9D%83)
