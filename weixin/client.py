@@ -221,6 +221,14 @@ class WxAppCloudAPI(oauth2.OAuth2API):
             raise Exception("Unsupported format")
         super(WxAppCloudAPI, self).__init__(*args, **kwargs)
 
+    # 触发云函数
+    invoke_func = bind_method(
+        path="/tcb/invokecloudfunction",
+        method="POST",
+        accepts_parameters=["json_body"],
+        response_type="entry",
+    )
+
     # 统计集合记录数或统计查询语句对应的结果记录数
     db_count = bind_method(
         path="/tcb/databasecount",
@@ -308,3 +316,46 @@ class WxAppCloudAPI(oauth2.OAuth2API):
         accepts_parameters=["json_body"],
         response_type="entry",
     )
+
+    # 上传文件 获取文件上传链接
+    upload_file = bind_method(
+        path="/tcb/uploadfile",
+        method="POST",
+        accepts_parameters=["json_body"],
+        response_type="entry",
+    )
+
+    # 获取文件下载链接
+    batch_download_file = bind_method(
+        path="/tcb/batchdownloadfile",
+        method="POST",
+        accepts_parameters=["json_body"],
+        response_type="entry",
+    )
+    batch_download_file.__doc__ = """
+    获取文件下载链接
+    参数：json_body  字典
+        json_body 结构：
+            env string 云环境ID
+            file_list	Array.<Object>	文件列表
+            file_list 的结构
+            fileid	string	文件ID
+            max_age	number	下载链接有效期
+    batch_download_file(json_body={"env": "envid", [{"fileid": "cloud://test2-4a89da.7465-test2-4a89da/A.png", "max_age": 7200}]})
+    """
+
+    # 批量删除文件
+    batch_delete_file = bind_method(
+        path="/tcb/batchdeletefile",
+        method="POST",
+        accepts_parameters=["json_body"],
+        response_type="entry",
+    )
+    batch_delete_file.__doc__ = """
+    批量删除文件
+    参数：json_body  字典
+        json_body 结构：
+            env string 云环境ID
+            file_list	Array.string 文件列表
+    example: batch_delete_file(json_body={"env": "envid", ["cloud://test2-4a89da.7465-test2-4a89da/A.png"]})
+    """
