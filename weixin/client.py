@@ -10,9 +10,12 @@ Date:   2015-02-06
 Description: Weixin OAuth2
 """
 
+import requests
+import xmltodict
+
 from . import oauth2
-from .bind import bind_method
-from .helper import genarate_signature
+from .bind import bind_method, WeixinAPIError
+from .helper import genarate_signature, smart_bytes, smart_str
 
 
 SUPPORTED_FORMATS = ["", "json"]
@@ -317,13 +320,53 @@ class WxAppCloudAPI(oauth2.OAuth2API):
         response_type="entry",
     )
 
-    # 上传文件 获取文件上传链接
-    upload_file = bind_method(
+    pre_upload_file = bind_method(
         path="/tcb/uploadfile",
         method="POST",
         accepts_parameters=["json_body"],
         response_type="entry",
     )
+    # 上传文件 获取文件上传链接
+    def upload_file(self, json_body=None):
+        """
+        获取文件下载链接
+        参数：json_body  字典
+            json_body 结构：
+                env string 云环境ID
+                path string 文件云存储的路径(包括文件名),比如：  test/file.txt
+                filepath string 文件本地路径
+        upload_file(json_body={"env": "envid", "path": "test/file.txt", "filepath": "/home/user/test.txt"})
+        """
+        try:
+            with open(json_body["filepath"], "rb") as f:
+                file_data = f.read()
+        except Exception as e:
+            raise WeixinAPIError("400", "000000", e)
+
+        filepath = json_body.pop("filepath", None)
+        pre_resp = self.pre_upload_file(json_body=json_body)
+        if pre_resp.get("errcode") == 0 and pre_resp.get("errmsg") == "ok":
+            files = {
+                "key": json_body.get("path"),
+                "Signature": pre_resp.get("authorization"),
+                "x-cos-security-token": pre_resp.get("token"),
+                "x-cos-meta-fileid": pre_resp.get("cos_file_id"),
+                "file": file_data,  # file 一定要放到最后，血泪的教训
+            }
+            # encode
+            params = {smart_str(k): v for k, v in files.items()}
+            resp = requests.post(pre_resp.get("url"), files=params)
+            status_code = resp.status_code
+            if status_code == 204:
+                return {"errcode": 0, "errmsg": "ok"}
+            else:
+                content_obj = xmltodict.parse(resp.content)
+                results = content_obj.get("Error", {})
+                raise WeixinAPIError(status_code, results["Code"], results["Message"])
+        else:
+            raise WeixinAPIError(
+                pre_resp.status_code, pre_resp["errcode"], pre_resp["errmsg"]
+            )
 
     # 获取文件下载链接
     batch_download_file = bind_method(
