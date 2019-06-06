@@ -365,7 +365,7 @@ class WxAppCloudAPI(oauth2.OAuth2API):
                 raise WeixinAPIError(status_code, results["Code"], results["Message"])
         else:
             raise WeixinAPIError(
-                pre_resp.status_code, pre_resp["errcode"], pre_resp["errmsg"]
+                400, pre_resp["errcode"], pre_resp["errmsg"]
             )
 
     # 获取文件下载链接
