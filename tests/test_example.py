@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+import os
+import sys
+
+sys.path.append(os.path.abspath('./'))
 
 from weixin.client import WeixinAPI
 from weixin.oauth2 import OAuth2AuthExchangeError
