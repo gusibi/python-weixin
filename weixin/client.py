@@ -346,15 +346,15 @@ class WxAppCloudAPI(oauth2.OAuth2API):
         filepath = json_body.pop("filepath", None)
         pre_resp = self.pre_upload_file(json_body=json_body)
         if pre_resp.get("errcode") == 0 and pre_resp.get("errmsg") == "ok":
-            files = {
-                "key": json_body.get("path"),
-                "Signature": pre_resp.get("authorization"),
-                "x-cos-security-token": pre_resp.get("token"),
-                "x-cos-meta-fileid": pre_resp.get("cos_file_id"),
-                "file": file_data,  # file 一定要放到最后，血泪的教训
-            }
+            files = [
+                ("key", json_body.get("path")),
+                ("x-cos-security-token", pre_resp.get("token")),
+                ("x-cos-meta-fileid", pre_resp.get("cos_file_id")),
+                ("Signature", pre_resp.get("authorization")),
+                ("file", file_data),  # file 一定要放到最后，血泪的教训
+			]
             # encode
-            params = {smart_str(k): v for k, v in files.items()}
+            params = [(smart_str(k), v) for k, v in files]
             resp = requests.post(pre_resp.get("url"), files=params)
             status_code = resp.status_code
             if status_code == 204:
