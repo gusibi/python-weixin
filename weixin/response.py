@@ -5,11 +5,30 @@ from .reply import TextReply
 from .config import AUTO_REPLY_CONTENT
 
 
-ALLOWED_MSG_TYPES = set(['text', 'image', 'voice', 'video', 'miniprogrampage',
-                         'shortvideo', 'location', 'link'])
-ALLOWED_EVENTS = set(['subscribe', 'unsubscribe', 'unsub_scan',
-                      'scan', 'click', 'location', 'view',
-                      'templatesendjobfinish'])
+ALLOWED_MSG_TYPES = set(
+    [
+        "text",
+        "image",
+        "voice",
+        "video",
+        "miniprogrampage",
+        "shortvideo",
+        "location",
+        "link",
+    ]
+)
+ALLOWED_EVENTS = set(
+    [
+        "subscribe",
+        "unsubscribe",
+        "unsub_scan",
+        "scan",
+        "click",
+        "location",
+        "view",
+        "templatesendjobfinish",
+    ]
+)
 
 
 class WXResponse(object):
@@ -18,7 +37,7 @@ class WXResponse(object):
 
     def __init__(self, xml_dict):
         # 微信请求的数据
-        self.data = xml_dict.get('xml') or xml_dict
+        self.data = xml_dict.get("xml") or xml_dict
         self.reply_params = {}
         self.reply = None
 
@@ -27,7 +46,7 @@ class WXResponse(object):
         return self.make_response()
 
     def check_event(self):
-        '''
+        """
         接收的事件
         subscribe：订阅
         unsubscribe：取消订阅
@@ -36,19 +55,19 @@ class WXResponse(object):
         LOCATION: 上报地理位置
         CLICK: 点击菜单
         VIEW: 点击菜单链接
-        '''
-        event = self.data.get('Event')
+        """
+        event = self.data.get("Event")
         if not event:
             return None
-        if event == 'subscribe':
-            if self.data.get('EventKey') and self.data.get('Ticket'):
-                return 'unsub_scan'
+        if event == "subscribe":
+            if self.data.get("EventKey") and self.data.get("Ticket"):
+                return "unsub_scan"
             return event
         return event.lower()
 
     def _subscribe_event_handler(self):
         # 订阅事件处理逻辑
-        self.reply_params['content'] = self.auto_reply_content
+        self.reply_params["content"] = self.auto_reply_content
         self.reply = TextReply(**self.reply_params).render()
 
     def _unsubscribe_event_handler(self):
@@ -81,7 +100,7 @@ class WXResponse(object):
 
     def _text_msg_handler(self):
         # 文字消息处理逻辑
-        self.reply_params['content'] = self.auto_reply_content
+        self.reply_params["content"] = self.auto_reply_content
         self.reply = TextReply(**self.reply_params).render()
 
     def _image_msg_handler(self):
@@ -114,21 +133,21 @@ class WXResponse(object):
 
     def _data_handler(self):
         # 只取出消息类型和事件
-        msg_type = self.data.get('MsgType')
-        self.reply_params['to_user'] = self.data.get('FromUserName')
-        self.reply_params['from_user'] = self.data.get('ToUserName')
+        msg_type = self.data.get("MsgType")
+        self.reply_params["to_user"] = self.data.get("FromUserName")
+        self.reply_params["from_user"] = self.data.get("ToUserName")
         event = None
-        if msg_type == 'event':
+        if msg_type == "event":
             event = self.check_event()
-        elif msg_type == 'miniprogrampage':
-            event = 'miniprogrampage'
+        elif msg_type == "miniprogrampage":
+            event = "miniprogrampage"
         return msg_type, event
 
     def _event_handler(self, event):
         if event not in ALLOWED_EVENTS:
             # TODO raise except
             return
-        methodname = '_{0}_event_handler'.format(event)
+        methodname = "_{0}_event_handler".format(event)
         method = getattr(self, methodname, None)
         if method:
             return method()
@@ -136,10 +155,10 @@ class WXResponse(object):
 
     def handler(self):
         msg_type, event = self._data_handler()
-        if msg_type == 'event':
+        if msg_type == "event":
             return self._event_handler(event)
         elif msg_type in ALLOWED_MSG_TYPES:
-            methodname = '_{0}_msg_handler'.format(msg_type)
+            methodname = "_{0}_msg_handler".format(msg_type)
             return getattr(self, methodname, None)()
         else:
             # TODO raise except
@@ -151,5 +170,5 @@ class WXResponse(object):
         """
         self.handler()
         if not self.reply:
-            return 'success'
+            return "success"
         return self.reply

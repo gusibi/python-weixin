@@ -17,5 +17,5 @@ venv
 weixin/.ropeproject/
 
 # test
-test_example.py
+# test_example.py
 test_settings.py

@@ -5,7 +5,7 @@
 File:   client.py
 Author: goodspeed
 Email:  cacique1103@gmail.com
-Github: https://github.com/zongxiao
+Github: https://github.com/gusibi
 Date:   2015-02-11
 Description: Weixin helpers
 """
@@ -20,32 +20,28 @@ from six.moves import html_parser
 
 PY2 = sys.version_info[0] == 2
 
-_always_safe = ('abcdefghijklmnopqrstuvwxyz'
-                'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.-+')
+_always_safe = "abcdefghijklmnopqrstuvwxyz" "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.-+"
 
 safe_char = _always_safe
 
-error_dict = {
-    'AppID 参数错误': {
-        'errcode': 40013,
-        'errmsg': 'invalid appid'
-    }
-}
+error_dict = {"AppID 参数错误": {"errcode": 40013, "errmsg": "invalid appid"}}
 
 
 if PY2:
     text_type = unicode
     iteritems = lambda d, *args, **kwargs: d.iteritems(*args, **kwargs)
 
-    def to_native(x, charset=sys.getdefaultencoding(), errors='strict'):
+    def to_native(x, charset=sys.getdefaultencoding(), errors="strict"):
         if x is None or isinstance(x, str):
             return x
         return x.encode(charset, errors)
+
+
 else:
     text_type = str
     iteritems = lambda d, *args, **kwargs: iter(d.items(*args, **kwargs))
 
-    def to_native(x, charset=sys.getdefaultencoding(), errors='strict'):
+    def to_native(x, charset=sys.getdefaultencoding(), errors="strict"):
         if x is None or isinstance(x, str):
             return x
         return x.decode(charset, errors)
@@ -60,15 +56,18 @@ available.
 
 try:
     import hashlib
+
     md5_constructor = hashlib.md5
     md5_hmac = md5_constructor
     sha_constructor = hashlib.sha1
     sha_hmac = sha_constructor
 except ImportError:
     import md5
+
     md5_constructor = md5.new
     md5_hmac = md5
     import sha
+
     sha_constructor = sha.new
     sha_hmac = sha
 
@@ -79,6 +78,7 @@ class Promise(object):
     the closure of the lazy function. It can be used to recognize
     promises in code.
     """
+
     pass
 
 
@@ -89,11 +89,10 @@ class _UnicodeDecodeError(UnicodeDecodeError):
 
     def __str__(self):
         original = UnicodeDecodeError.__str__(self)
-        return '%s. You passed in %r (%s)' % (original, self.obj,
-                                              type(self.obj))
+        return "%s. You passed in %r (%s)" % (original, self.obj, type(self.obj))
 
 
-def smart_text(s, encoding='utf-8', strings_only=False, errors='strict'):
+def smart_text(s, encoding="utf-8", strings_only=False, errors="strict"):
     """
     Returns a text object representing 's' -- unicode on Python 2 and str on
     Python 3. Treats bytestrings using the 'encoding' codec.
@@ -105,9 +104,14 @@ def smart_text(s, encoding='utf-8', strings_only=False, errors='strict'):
     return force_text(s, encoding, strings_only, errors)
 
 
-_PROTECTED_TYPES = six.integer_types + (type(None), float, Decimal,
-                                        datetime.datetime, datetime.date,
-                                        datetime.time)
+_PROTECTED_TYPES = six.integer_types + (
+    type(None),
+    float,
+    Decimal,
+    datetime.datetime,
+    datetime.date,
+    datetime.time,
+)
 
 
 def is_protected_type(obj):
@@ -118,7 +122,7 @@ def is_protected_type(obj):
     return isinstance(obj, _PROTECTED_TYPES)
 
 
-def force_text(s, encoding='utf-8', strings_only=False, errors='strict'):
+def force_text(s, encoding="utf-8", strings_only=False, errors="strict"):
     """
     Similar to smart_text, except that lazy instances are resolved to
     strings, rather than kept as lazy objects.
@@ -136,7 +140,7 @@ def force_text(s, encoding='utf-8', strings_only=False, errors='strict'):
                     s = six.text_type(s, encoding, errors)
                 else:
                     s = six.text_type(s)
-            elif hasattr(s, '__unicode__'):
+            elif hasattr(s, "__unicode__"):
                 s = six.text_type(s)
             else:
                 s = six.text_type(bytes(s), encoding, errors)
@@ -154,12 +158,11 @@ def force_text(s, encoding='utf-8', strings_only=False, errors='strict'):
             # working unicode method. Try to handle this without raising a
             # further exception by individually forcing the exception args
             # to unicode.
-            s = ' '.join(force_text(arg, encoding, strings_only, errors)
-                         for arg in s)
+            s = " ".join(force_text(arg, encoding, strings_only, errors) for arg in s)
     return s
 
 
-def smart_bytes(s, encoding='utf-8', strings_only=False, errors='strict'):
+def smart_bytes(s, encoding="utf-8", strings_only=False, errors="strict"):
     """
     Returns a bytestring version of 's', encoded as specified in 'encoding'.
     If strings_only is True, don't convert (some) non-string-like objects.
@@ -170,7 +173,7 @@ def smart_bytes(s, encoding='utf-8', strings_only=False, errors='strict'):
     return force_bytes(s, encoding, strings_only, errors)
 
 
-def force_bytes(s, encoding='utf-8', strings_only=False, errors='strict'):
+def force_bytes(s, encoding="utf-8", strings_only=False, errors="strict"):
     """
     Similar to smart_bytes, except that lazy instances are resolved to
     strings, rather than kept as lazy objects.
@@ -178,10 +181,10 @@ def force_bytes(s, encoding='utf-8', strings_only=False, errors='strict'):
     """
     # Handle the common case first for performance reasons.
     if isinstance(s, bytes):
-        if encoding == 'utf-8':
+        if encoding == "utf-8":
             return s
         else:
-            return s.decode('utf-8', errors).encode(encoding, errors)
+            return s.decode("utf-8", errors).encode(encoding, errors)
     if strings_only and is_protected_type(s):
         return s
     if isinstance(s, Promise):
@@ -197,12 +200,13 @@ def force_bytes(s, encoding='utf-8', strings_only=False, errors='strict'):
                 # An Exception subclass containing non-ASCII data that doesn't
                 # know how to print itself properly. We shouldn't raise a
                 # further exception.
-                return b' '.join(force_bytes(arg, encoding,
-                                             strings_only, errors)
-                                 for arg in s)
+                return b" ".join(
+                    force_bytes(arg, encoding, strings_only, errors) for arg in s
+                )
             return six.text_type(s).encode(encoding, errors)
     else:
         return s.encode(encoding, errors)
+
 
 if six.PY3:
     smart_str = smart_text
@@ -228,31 +232,32 @@ Apply force_text in Python 3 and force_bytes in Python 2.
 def genarate_js_signature(params):
     keys = params.keys()
     keys.sort()
-    params_str = b''
+    params_str = b""
     for key in keys:
-        params_str += b'%s=%s&' % (smart_str(key), smart_str(params[key]))
+        params_str += b"%s=%s&" % (smart_str(key), smart_str(params[key]))
     params_str = params_str[:-1]
     return sha1(params_str).hexdigest()
 
 
 def genarate_signature(params):
     sorted_params = sorted([v for k, v in params.items()])
-    params_str = smart_str(''.join(sorted_params))
-    return sha1(str(params_str).encode('utf-8')).hexdigest()
+    params_str = smart_str("".join(sorted_params))
+    return sha1(str(params_str).encode("utf-8")).hexdigest()
 
 
 def get_encoding(html=None, headers=None):
     try:
         import chardet
+
         if html:
-            encoding = chardet.detect(html).get('encoding')
+            encoding = chardet.detect(html).get("encoding")
             return encoding
     except ImportError:
         pass
     if headers:
-        content_type = headers.get('content-type')
+        content_type = headers.get("content-type")
         try:
-            encoding = content_type.split(' ')[1].split('=')[1]
+            encoding = content_type.split(" ")[1].split("=")[1]
             return encoding
         except IndexError:
             pass
@@ -275,7 +280,7 @@ def iter_multi_items(mapping):
             yield item
 
 
-def url_quote(string, charset='utf-8', errors='strict', safe='/:', unsafe=''):
+def url_quote(string, charset="utf-8", errors="strict", safe="/:", unsafe=""):
     """
     URL encode a single string with a given encoding.
 
@@ -302,12 +307,12 @@ def url_quote(string, charset='utf-8', errors='strict', safe='/:', unsafe=''):
         if char in safe:
             rv.append(char)
         else:
-            rv.extend(('%%%02X' % char).encode('ascii'))
+            rv.extend(("%%%02X" % char).encode("ascii"))
     return to_native(bytes(rv))
 
 
-def url_quote_plus(string, charset='utf-8', errors='strict', safe=''):
-    return url_quote(string, charset, errors, safe + ' ', '+').replace(' ', '+')
+def url_quote_plus(string, charset="utf-8", errors="strict", safe=""):
+    return url_quote(string, charset, errors, safe + " ", "+").replace(" ", "+")
 
 
 def _url_encode_impl(obj, charset, encode_keys, sort, key):
@@ -321,31 +326,31 @@ def _url_encode_impl(obj, charset, encode_keys, sort, key):
             key = text_type(key).encode(charset)
         if not isinstance(value, bytes):
             value = text_type(value).encode(charset)
-        yield url_quote_plus(key) + '=' + url_quote_plus(value)
+        yield url_quote_plus(key) + "=" + url_quote_plus(value)
 
 
-def url_encode(obj, charset='utf-8', encode_keys=False, sort=False, key=None,
-               separator=b'&'):
-    separator = to_native(separator, 'ascii')
+def url_encode(
+    obj, charset="utf-8", encode_keys=False, sort=False, key=None, separator=b"&"
+):
+    separator = to_native(separator, "ascii")
     return separator.join(_url_encode_impl(obj, charset, encode_keys, sort, key))
 
 
 class WeixiErrorParser(html_parser.HTMLParser):
-
     def __init__(self):
         html_parser.HTMLParser.__init__(self)
         self.recording = 0
         self.data = []
 
     def handle_starttag(self, tag, attrs):
-        if tag != 'h4':
+        if tag != "h4":
             return
         if self.recording:
             self.recording += 1
         self.recording = 1
 
     def handle_endtag(self, tag):
-        if tag == 'h4' and self.recording:
+        if tag == "h4" and self.recording:
             self.recording -= 1
 
     def handle_data(self, data):
@@ -353,8 +358,8 @@ class WeixiErrorParser(html_parser.HTMLParser):
             self.data.append(data)
 
 
-def error_parser(error_html, encoding='gbk'):
-    html = text_type(error_html, encoding or 'gbk')
+def error_parser(error_html, encoding="gbk"):
+    html = text_type(error_html, encoding or "gbk")
     error_parser = WeixiErrorParser()
     error_parser.feed(html)
     if error_parser.data:

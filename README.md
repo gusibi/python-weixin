@@ -1,7 +1,7 @@
 python-weixin
 -----
 ![Build Status](https://travis-ci.org/gusibi/python-weixin.svg?branch=master)
-![](https://img.shields.io/badge/version-0.4.3--dev-FF00CC.svg)
+![](https://img.shields.io/badge/version-0.5.0--dev-FF00CC.svg)
 ![](https://img.shields.io/github/forks/gusibi/python-weixin.svg) 
 ![](https://img.shields.io/github/stars/gusibi/python-weixin.svg)
 ![](https://img.shields.io/github/issues/gusibi/python-weixin.svg)
@@ -40,6 +40,7 @@ Requires
 * [微信公众平台](https://github.com/gusibi/python-weixin/wiki/%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%B9%B3%E5%8F%B0)
 * [微信授权](https://github.com/gusibi/python-weixin/wiki/%E5%BE%AE%E4%BF%A1%E6%8E%88%E6%9D%83)
 * [微信支付](https://github.com/gusibi/python-weixin/wiki/%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98)
+* [微信小程序云开发](https://github.com/gusibi/python-weixin/wiki/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E4%BA%91%E5%BC%80%E5%8F%91)
 
 ### 微信小程序使用示例：
 
