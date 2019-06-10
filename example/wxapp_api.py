@@ -3,7 +3,7 @@ from os import environ
 from datetime import datetime
 
 from weixin import WXAPPAPI
-from weixin.helper import smart_str
+from weixin.helper import smart_bytes
 
 appid = environ.get("WXAPP_APPID", "appid")
 secret = environ.get("WXAPP_SECRET", "secret")
@@ -29,11 +29,11 @@ json_body = {
         },
         "keyword2": {
             # 备注
-            "value": "请点击查看".encode("utf-8").decode("latin1")
+            "value": smart_bytes("请点击查看").decode("latin1")
         },
         "keyword3": {
             # 状态
-            "value": "图片已经生成".encode("utf-8").decode("latin1"),
+            "value": smart_bytes("图片已经生成").decode("latin1"),
             "color": "#173177",
         },
     },
@@ -43,3 +43,4 @@ json_body = {
 api = WXAPPAPI(access_token=token)
 resp = api.send_template(json_body=json_body)
 print(resp)
+
