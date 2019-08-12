@@ -230,7 +230,7 @@ Apply force_text in Python 3 and force_bytes in Python 2.
 
 
 def genarate_js_signature(params):
-    keys = params.keys()
+    keys = list(params.keys())
     keys.sort()
     params_str = b""
     for key in keys:
