@@ -232,10 +232,10 @@ Apply force_text in Python 3 and force_bytes in Python 2.
 def genarate_js_signature(params):
     keys = list(params.keys())
     keys.sort()
-    params_str = b""
+    params_str = ""
     for key in keys:
-        params_str += b"%s=%s&" % (smart_str(key), smart_str(params[key]))
-    params_str = params_str[:-1]
+        params_str += "%s=%s&" % (smart_str(key), smart_str(params[key]))
+    params_str = smart_bytes(params_str[:-1])
     return sha1(params_str).hexdigest()
 
 
