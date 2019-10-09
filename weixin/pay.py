@@ -126,10 +126,11 @@ class WeixinPay(object):
                      detail='', attach='', time_start='', time_expire='',
                      goods_tag='', product_id='', limit_pay='', device_info='',
                      fee_type='CNY', spbill_create_ip=SPBILL_CREATE_IP,
-                     trade_type='JSAPI', notify_url=''):
+                     trade_type='JSAPI', notify_url='', profit_sharing='N'):
         """
         统一下单接口
         https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_1
+        :param profit_sharing: 可选，是否需要分账，缺省为'N'不分账，如要分账则设置为'Y'，字母要求大写
         :param trade_type: 交易类型，取值如下：JSAPI，NATIVE，APP，WAP, MWEB
         :param body: 商品描述
         :param total_fee: 总金额，单位分
@@ -169,6 +170,7 @@ class WeixinPay(object):
             goods_tag=goods_tag,                 # 商品标记
             product_id=product_id,               # 商品ID
             limit_pay=limit_pay,                 # 指定支付方式
+            profit_sharing=profit_sharing,       # 是否需要分账
         )
         method, url, kwargs = self.prepare_request('POST', path, params)
         return self.make_request(method, url, kwargs)
