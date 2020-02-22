@@ -217,3 +217,8 @@ API 列表
 
 #### 有问题可以在公号讨论
 ![关注公号](http://media.gusibi.mobi/ASlCYThVMfqenyMHXATIbnBew5Fyt8D3Y2l6k0fL4kZuIs0zzUUT21BCpOm51o2R)
+
+### 感谢
+
+[![jetbrains](http://media.gusibi.mobi/w3W6TnRrR2oR3BlPeG-0kaqqQLY-Hq9FQ9hsYJe4mdAGHqV_qY0smR7gFmmY8B_t)](https://www.jetbrains.com/)
+

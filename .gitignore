@@ -3,6 +3,7 @@
 *.swp
 
 .DS_Store
+.idea
 
 # build
 .gitconfig
