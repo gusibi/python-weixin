@@ -10,6 +10,7 @@ import string
 import random
 import socket
 
+import requests_pkcs12
 import six
 import requests
 import xmltodict
@@ -92,6 +93,7 @@ class WeixinPay(object):
         self.mch_key = kwargs.get('mch_key')
         self.notify_url = kwargs.get('notify_url')
         self.partner_key = kwargs.get('partner_key')
+        self.pfx = kwargs.get('pfx')
 
     def _full_url(self, path):
         return '%s%s' % (self.BASE_URL, path)
@@ -277,7 +279,11 @@ class WeixinPay(object):
         return self.make_request(method, url, kwargs)
 
     def make_request(self, method, url, kwargs):
-        req = requests.request(method, url, timeout=TIMEOUT, **kwargs)
+        if not self.pfx:
+            req = requests.request(method, url, timeout=TIMEOUT, **kwargs)
+        else:
+            req = requests_pkcs12.request(method, url, pkcs12_filename=self.pfx,
+                                          pkcs12_password=self.mch_id, timeout=TIMEOUT, **kwargs)
         # xml to dict
         result = xmltodict.parse(req.content)
         # 只需要返回数据
