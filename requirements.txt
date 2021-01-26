@@ -4,3 +4,4 @@ chardet
 six
 xmltodict
 pycryptodome
+requests_pkcs12
