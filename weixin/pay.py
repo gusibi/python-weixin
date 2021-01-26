@@ -540,6 +540,21 @@ class WeixinEnterprisePay(WeixinPay):
         method, url, kwargs = self.prepare_request('POST', path, params)
         return self.make_request(method, url, kwargs)
 
+    def get_transfer_info(self, partner_trade_no):
+        """
+        企业付款查询
+        https://pay.weixin.qq.com/wiki/doc/api/tools/mch_pay.php?chapter=14_3
+        :param partner_trade_no: 商户订单号，默认自动生成
+        :return: 返回的结果数据
+        """
+        p = WeixinEnterprisePayQuery(appid=self.appid,
+                                     mch_id=self.mch_id,
+                                     mch_cert=self.mch_cert,
+                                     mch_key=self.mch_key,
+                                     pfx=self.pfx,
+                                     partner_key=self.partner_key)
+        return p.gettransferinfo(partner_trade_no)
+
 
 class WeixinEnterprisePayQuery(WeixinPay):
 
